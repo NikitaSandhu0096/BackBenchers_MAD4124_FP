@@ -41,8 +41,6 @@ public class SubjectsFragment<onViewCreate> extends Fragment {
 
         super.onViewCreated(view, savedInstanceState);
         subjectrecyclerView = view.findViewById(R.id.subjectsrecyclerView);
-        txtTitle = view.findViewById(R.id.txtRedTitle);
-       // txtTitle.setText("I am RED Title");
 
 //        populateSubjects();
 //

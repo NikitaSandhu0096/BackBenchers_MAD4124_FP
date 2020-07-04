@@ -31,8 +31,6 @@ public class MapsFragment<onViewCreate> extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
 
         super.onViewCreated(view, savedInstanceState);
-        txtTitle = view.findViewById(R.id.txtRedTitle);
-        txtTitle.setText("This is Maps");
 
     }
 }
