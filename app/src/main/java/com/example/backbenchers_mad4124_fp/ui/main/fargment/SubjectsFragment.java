@@ -1,4 +1,4 @@
-package com.example.backbenchers_mad4124_fp.ui.main;
+package com.example.backbenchers_mad4124_fp.ui.main.fargment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -41,11 +41,9 @@ public class SubjectsFragment<onViewCreate> extends Fragment {
 
         super.onViewCreated(view, savedInstanceState);
         subjectrecyclerView = view.findViewById(R.id.subjectsrecyclerView);
-        txtTitle = view.findViewById(R.id.txtRedTitle);
-       // txtTitle.setText("I am RED Title");
 
-        populateSubjects();
-
+//        populateSubjects();
+//
         subjectsAdapter = new SubjectsAdapter(subjects);
 
         StaggeredGridLayoutManager mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(2,
@@ -54,8 +52,7 @@ public class SubjectsFragment<onViewCreate> extends Fragment {
         subjectrecyclerView.setAdapter(subjectsAdapter);
     }
 
-    private void populateSubjects(){
-        subjects = new ArrayList<>();
-        subjects.add(new Subject("Subject1"));
-    }
+//    private void populateSubjects(){
+
+//    }
 }
