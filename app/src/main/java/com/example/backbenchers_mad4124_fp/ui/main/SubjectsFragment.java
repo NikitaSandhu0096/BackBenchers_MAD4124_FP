@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.backbenchers_mad4124_fp.R;
 import com.example.backbenchers_mad4124_fp.adapters.SubjectsAdapter;
@@ -39,9 +40,21 @@ public class SubjectsFragment<onViewCreate> extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
 
         super.onViewCreated(view, savedInstanceState);
-       // subjectrecyclerView = view.findViewById(R.id.subjectsrecyclerView);
+        subjectrecyclerView = view.findViewById(R.id.subjectsrecyclerView);
         txtTitle = view.findViewById(R.id.txtRedTitle);
        // txtTitle.setText("I am RED Title");
 
+//        populateSubjects();
+//
+//        subjectsAdapter = new SubjectsAdapter(subjects);
+//
+//        StaggeredGridLayoutManager mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(2,
+//                StaggeredGridLayoutManager.VERTICAL);
+//        subjectrecyclerView.setLayoutManager(mStaggeredGridLayoutManager);
+//        subjectrecyclerView.setAdapter(subjectsAdapter);
     }
+
+//    private void populateSubjects(){
+
+//    }
 }
