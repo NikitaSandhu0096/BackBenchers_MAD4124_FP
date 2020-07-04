@@ -1,4 +1,4 @@
-package com.example.backbenchers_mad4124_fp.ui.main;
+package com.example.backbenchers_mad4124_fp.ui.main.fargment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
