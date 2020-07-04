@@ -44,12 +44,12 @@ public class SubjectsFragment<onViewCreate> extends Fragment {
 
 //        populateSubjects();
 //
-//        subjectsAdapter = new SubjectsAdapter(subjects);
-//
-//        StaggeredGridLayoutManager mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(2,
-//                StaggeredGridLayoutManager.VERTICAL);
-//        subjectrecyclerView.setLayoutManager(mStaggeredGridLayoutManager);
-//        subjectrecyclerView.setAdapter(subjectsAdapter);
+        subjectsAdapter = new SubjectsAdapter(subjects);
+
+        StaggeredGridLayoutManager mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(2,
+                StaggeredGridLayoutManager.VERTICAL);
+        subjectrecyclerView.setLayoutManager(mStaggeredGridLayoutManager);
+        subjectrecyclerView.setAdapter(subjectsAdapter);
     }
 
 //    private void populateSubjects(){
