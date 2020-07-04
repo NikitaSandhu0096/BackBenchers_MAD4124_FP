@@ -44,17 +44,18 @@ public class SubjectsFragment<onViewCreate> extends Fragment {
         txtTitle = view.findViewById(R.id.txtRedTitle);
        // txtTitle.setText("I am RED Title");
 
-//        populateSubjects();
-//
-//        subjectsAdapter = new SubjectsAdapter(subjects);
-//
-//        StaggeredGridLayoutManager mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(2,
-//                StaggeredGridLayoutManager.VERTICAL);
-//        subjectrecyclerView.setLayoutManager(mStaggeredGridLayoutManager);
-//        subjectrecyclerView.setAdapter(subjectsAdapter);
+        populateSubjects();
+
+        subjectsAdapter = new SubjectsAdapter(subjects);
+
+        StaggeredGridLayoutManager mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(2,
+                StaggeredGridLayoutManager.VERTICAL);
+        subjectrecyclerView.setLayoutManager(mStaggeredGridLayoutManager);
+        subjectrecyclerView.setAdapter(subjectsAdapter);
     }
 
-//    private void populateSubjects(){
-
-//    }
+    private void populateSubjects(){
+        subjects = new ArrayList<>();
+        subjects.add(new Subject("Subject1"));
+    }
 }
