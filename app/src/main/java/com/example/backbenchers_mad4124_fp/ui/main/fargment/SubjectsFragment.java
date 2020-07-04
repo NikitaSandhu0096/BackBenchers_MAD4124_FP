@@ -42,8 +42,8 @@ public class SubjectsFragment<onViewCreate> extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         subjectrecyclerView = view.findViewById(R.id.subjectsrecyclerView);
 
-//        populateSubjects();
-//
+        populateSubjects();
+
         subjectsAdapter = new SubjectsAdapter(subjects);
 
         StaggeredGridLayoutManager mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(2,
@@ -52,7 +52,8 @@ public class SubjectsFragment<onViewCreate> extends Fragment {
         subjectrecyclerView.setAdapter(subjectsAdapter);
     }
 
-//    private void populateSubjects(){
-
-//    }
+    private void populateSubjects(){
+        subjects = new ArrayList<>();
+        subjects.add(new Subject("Subject 1"));
+    }
 }
