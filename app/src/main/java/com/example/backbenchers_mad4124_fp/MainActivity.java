@@ -33,6 +33,12 @@ public class MainActivity extends AppCompatActivity {
         tabs.setupWithViewPager(viewPager);
         FloatingActionButton fab = findViewById(R.id.fab);
 
+        TabLayout.Tab tab = tabs.getTabAt(0);
+        tab.setText("Subjects");
+
+        TabLayout.Tab tab1 = tabs.getTabAt(1);
+        tab1.setText("Maps");
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
