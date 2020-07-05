@@ -31,5 +31,5 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:backgroundTint="#7C8CE4"
-        app:srcCompat="@android:drawable/ic_menu_edit" />
+        app:srcCompat="@drawable/ic_action_name_subject" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
