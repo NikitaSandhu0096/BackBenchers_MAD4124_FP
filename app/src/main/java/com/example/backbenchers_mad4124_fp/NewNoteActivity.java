@@ -3,6 +3,7 @@ package com.example.backbenchers_mad4124_fp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -22,5 +23,12 @@ public class NewNoteActivity extends AppCompatActivity {
         title = findViewById(R.id.titleTextInputEditText);
         cameraFab = findViewById(R.id.camerafab);
         audioFab = findViewById(R.id.audiofab);
+
+        cameraFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 }
