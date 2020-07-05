@@ -23,6 +23,7 @@ public class SubjectsFragment<onViewCreate> extends Fragment {
     private RecyclerView subjectrecyclerView;
     private ArrayList<Subject> subjects;
     private SubjectsAdapter subjectsAdapter;
+
     public SubjectsFragment() {
         // Required empty public constructor
     }

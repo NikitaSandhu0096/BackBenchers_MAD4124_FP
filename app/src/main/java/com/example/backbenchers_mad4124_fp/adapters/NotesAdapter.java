@@ -26,7 +26,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
     @Override
     public NotesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_notes, parent, false);
-        NotesAdapter.NotesViewHolder notesViewHolder = new NotesAdapter.NotesViewHolder(view);
+        NotesViewHolder notesViewHolder = new NotesViewHolder(view);
         return notesViewHolder;
     }
 
@@ -38,8 +38,8 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               Notes note = notesArrayList.get(position);
-                //Toast.makeText(v.getContext(),"Notes : ", Toast.LENGTH_SHORT).show();
+              // Notes note = notesArrayList.get(position);
+               Toast.makeText(v.getContext(),"Notes : ", Toast.LENGTH_SHORT).show();
             }
         });
 

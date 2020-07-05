@@ -35,6 +35,7 @@ public class SubjectsAdapter extends RecyclerView.Adapter<SubjectsAdapter.Subjec
     public void onBindViewHolder(@NonNull SubjectViewHolder holder, final int position) {
         final Subject subject = this.subjectArrayList.get(position);
         holder.txtSubject.setText(subject.getSubjectName());
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
