@@ -18,6 +18,8 @@ public class NotesDB extends SQLiteOpenHelper {
     public static final String subject_id = "SID";
     public static final String subject_name = "SUBJECT_NAME";
 
+    public static final String TBL_NOTES = "tblNotes";
+
     public NotesDB(@Nullable Context context) {
         super(context, "notes.db", null, 1);
     }
