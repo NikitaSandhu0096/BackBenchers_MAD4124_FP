@@ -7,8 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,18 +15,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import com.example.backbenchers_mad4124_fp.MainActivity;
 import com.example.backbenchers_mad4124_fp.R;
 import com.example.backbenchers_mad4124_fp.adapters.SubjectsAdapter;
 import com.example.backbenchers_mad4124_fp.database.NotesDB;
 import com.example.backbenchers_mad4124_fp.models.Subject;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
-
 public class SubjectsFragment<onViewCreate> extends Fragment implements FloatingActionButton.OnClickListener {
-    private TextView txtTitle;
-    private ArrayList<Subject> subjects;
     private SubjectsAdapter subjectsAdapter;
     private RecyclerView subjectrecyclerView;
     private NotesDB notesDB;
@@ -43,7 +36,7 @@ public class SubjectsFragment<onViewCreate> extends Fragment implements Floating
     }
 
     private void refreshData(){
-        subjectsAdapter = new SubjectsAdapter( notesDB.getAllSubjects());
+        subjectsAdapter = new SubjectsAdapter(notesDB.getAllSubjects());
 
         StaggeredGridLayoutManager mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(2,
                 StaggeredGridLayoutManager.VERTICAL);
