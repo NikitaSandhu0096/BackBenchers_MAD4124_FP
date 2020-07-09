@@ -25,7 +25,6 @@ public class NotesDB extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String createTableStatement = "CREATE TABLE " + tbl_subject + " (" + subject_id + " INTEGER PRIMARY KEY AUTOINCREMENT, " + subject_name + " TEXT)";
-
         db.execSQL(createTableStatement) ;
     }
 
@@ -42,11 +41,11 @@ public class NotesDB extends SQLiteOpenHelper {
     public boolean addSubject(Subject newSubject){
         SQLiteDatabase db = getWritableDatabase();
         ContentValues subject = new ContentValues();
-        
+
         subject.put(subject_name, newSubject.getSubjectName());
 
         long insert = db.insert(tbl_subject, null, subject);
-        if (insert == 1)
+        if (insert < 0)
         {
             return false;
         }
@@ -63,12 +62,10 @@ public class NotesDB extends SQLiteOpenHelper {
         SQLiteDatabase db = readableDB();
 
         Cursor cursor = db.rawQuery(query,null);
-
         if (cursor.moveToFirst()) {
             do{
                 Integer subjectId = cursor.getInt(0);
                 String subjectName = cursor.getString(1);
-
                 Subject temp = new Subject(subjectId,subjectName);
                 allSubjects.add(temp);
             }while (cursor.moveToNext());
