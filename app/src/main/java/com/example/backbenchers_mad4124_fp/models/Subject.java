@@ -1,14 +1,25 @@
 package com.example.backbenchers_mad4124_fp.models;
 
 public class Subject {
+
+    private Integer subjectId;
     private String subjectName;
 
-    public Subject(String subjectName){
+    public Subject(String subjectName) {
         this.subjectName = subjectName;
     }
 
-    public Subject(){
+    public Subject(Integer subjectId, String subjectName) {
+        this.subjectId = subjectId;
+        this.subjectName = subjectName;
+    }
 
+    public Integer getSubjectId() {
+        return subjectId;
+    }
+
+    public void setSubjectId(Integer subjectId) {
+        this.subjectId = subjectId;
     }
 
     public String getSubjectName() {
