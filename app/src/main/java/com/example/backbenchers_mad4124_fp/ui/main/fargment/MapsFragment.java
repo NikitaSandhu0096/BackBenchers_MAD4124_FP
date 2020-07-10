@@ -3,7 +3,9 @@ package com.example.backbenchers_mad4124_fp.ui.main.fargment;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Address;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -21,6 +23,7 @@ import com.example.backbenchers_mad4124_fp.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
@@ -29,6 +32,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+
+import java.io.IOException;
+import java.util.List;
 
 public class MapsFragment<onViewCreate> extends Fragment implements OnMapReadyCallback, LocationListener {
 
@@ -60,19 +66,11 @@ public class MapsFragment<onViewCreate> extends Fragment implements OnMapReadyCa
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-//        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-//        Criteria criteria = new Criteria();
-//        criteria.setAccuracy(Criteria.NO_REQUIREMENT);
-//        criteria.setPowerRequirement(Criteria.NO_REQUIREMENT);
-//        String bestProvider = locationManager.getBestProvider(criteria, true);
-//        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            return;
-//        }
-//        Location location = locationManager.getLastKnownLocation(bestProvider);
-        MapsInitializer.initialize(getContext());
         map = googleMap;
-        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-       // googleMap.addMarker(new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).title("Here"));
+        LatLng location = new LatLng(43.5890, -79.6441);
+        map.addMarker(new MarkerOptions().position(location).title("Here"));
+        map.moveCamera(CameraUpdateFactory.newLatLng(location));
+
     }
 
     @Override
