@@ -1,4 +1,4 @@
-package com.example.backbenchers_mad4124_fp;
+package com.example.backbenchers_mad4124_fp.ui.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,58 +9,49 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.backbenchers_mad4124_fp.R;
 import com.example.backbenchers_mad4124_fp.adapters.NotesAdapter;
-import com.example.backbenchers_mad4124_fp.adapters.SubjectsAdapter;
-import com.example.backbenchers_mad4124_fp.models.Notes;
-import com.example.backbenchers_mad4124_fp.models.Subject;
+import com.example.backbenchers_mad4124_fp.database.NotesDB;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import org.w3c.dom.Text;
-
 import java.io.Serializable;
-import java.util.ArrayList;
 
-public class NotesActivity extends AppCompatActivity implements Serializable {
+public class NotesActivity extends AppCompatActivity implements Serializable, FloatingActionButton.OnClickListener {
 
     private RecyclerView notesrecyclerView;
-    private ArrayList<Notes> notes;
-    private NotesAdapter notesAdapter;
-    private FloatingActionButton notesFab;
+    private NotesDB notesDB;
+    private Integer selectedSubjectId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notes);
 
-        notesFab = findViewById(R.id.notesFab);
-
+        FloatingActionButton notesFab = findViewById(R.id.notesFab);
         notesrecyclerView = findViewById(R.id.notesRecyclerView);
+        notesDB = new NotesDB(this);
+        selectedSubjectId = getIntent().getIntExtra("selectedSubjectId",1);
 
         populateNotes();
 
-        notesAdapter = new NotesAdapter(notes);
+        notesFab.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        populateNotes();
+    }
+
+    private void populateNotes(){
+        NotesAdapter notesAdapter = new NotesAdapter(notesDB.getNoteBySubjectId(selectedSubjectId), selectedSubjectId);
 
         StaggeredGridLayoutManager mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(2,
                 StaggeredGridLayoutManager.VERTICAL);
         notesrecyclerView.setLayoutManager(mStaggeredGridLayoutManager);
         notesrecyclerView.setAdapter(notesAdapter);
-
-        notesFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(NotesActivity.this, NewNoteActivity.class);
-                startActivity(intent);
-            }
-        });
-    }
-
-    private void populateNotes(){
-        notes = new ArrayList<>();
-        notes.add(new Notes("Note 1"));
     }
 
     @Override
@@ -82,5 +73,12 @@ public class NotesActivity extends AppCompatActivity implements Serializable {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent intent = new Intent(NotesActivity.this, NewNoteActivity.class);
+        intent.putExtra("selectedSubjectId", selectedSubjectId);
+        startActivity(intent);
     }
 }
