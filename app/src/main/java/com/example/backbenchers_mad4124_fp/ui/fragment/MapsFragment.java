@@ -1,4 +1,4 @@
-package com.example.backbenchers_mad4124_fp.ui.main.fargment;
+package com.example.backbenchers_mad4124_fp.ui.fragment;
 
 import android.Manifest;
 import android.content.Context;

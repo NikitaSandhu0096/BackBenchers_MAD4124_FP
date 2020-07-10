@@ -1,5 +1,6 @@
 package com.example.backbenchers_mad4124_fp.adapters;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,14 +13,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.backbenchers_mad4124_fp.R;
 import com.example.backbenchers_mad4124_fp.models.Notes;
 import com.example.backbenchers_mad4124_fp.models.Subject;
+import com.example.backbenchers_mad4124_fp.ui.activity.NewNoteActivity;
+import com.example.backbenchers_mad4124_fp.ui.activity.NotesActivity;
 
 import java.util.ArrayList;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHolder> {
     private ArrayList <Notes> notesArrayList;
-
-    public NotesAdapter(ArrayList<Notes> notesArrayList){
+    private Integer selectedNoteId;
+    public NotesAdapter(ArrayList<Notes> notesArrayList, Integer selectedNoteId){
         this.notesArrayList = notesArrayList;
+        this.selectedNoteId = selectedNoteId;
     }
 
     @NonNull
@@ -31,15 +35,17 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
     }
 
     @Override
-    public void onBindViewHolder(@NonNull NotesViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final NotesViewHolder holder, final int position) {
         Notes note = this.notesArrayList.get(position);
-        holder.txtNote.setText(note.getNote());
+        holder.txtNote.setText(note.getNOTE_TITLE());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              // Notes note = notesArrayList.get(position);
-               Toast.makeText(v.getContext(),"Notes : ", Toast.LENGTH_SHORT).show();
+               Notes note = notesArrayList.get(position);
+                Intent intent = new Intent(v.getContext(), NewNoteActivity.class);
+                intent.putExtra("selectedNoteId", note.getNOTE_ID());
+                v.getContext().startActivity(intent);
             }
         });
 

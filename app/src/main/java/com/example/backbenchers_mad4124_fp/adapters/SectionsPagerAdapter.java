@@ -1,4 +1,4 @@
-package com.example.backbenchers_mad4124_fp.ui.main;
+package com.example.backbenchers_mad4124_fp.adapters;
 
 import android.content.Context;
 
@@ -9,8 +9,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.example.backbenchers_mad4124_fp.R;
-import com.example.backbenchers_mad4124_fp.ui.main.fargment.MapsFragment;
-import com.example.backbenchers_mad4124_fp.ui.main.fargment.SubjectsFragment;
+import com.example.backbenchers_mad4124_fp.ui.fragment.MapsFragment;
+import com.example.backbenchers_mad4124_fp.ui.fragment.SubjectsFragment;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
