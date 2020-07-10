@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
@@ -12,6 +13,8 @@ import androidx.annotation.Nullable;
 import com.example.backbenchers_mad4124_fp.models.Notes;
 import com.example.backbenchers_mad4124_fp.models.Subject;
 
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 public class NotesDB extends SQLiteOpenHelper {
@@ -25,6 +28,7 @@ public class NotesDB extends SQLiteOpenHelper {
     private static final String NOTE_ID = "NID";
     private static final String NOTE_TITLE = "NOTE_TITLE";
     private static final String NOTE_DATA = "NOTE_DATA";
+    public static final String NOTE_TIMESTAMP = "TIMESTAMP";
 
 
     public NotesDB(@Nullable Context context) {
@@ -33,12 +37,11 @@ public class NotesDB extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createTableStatement = "CREATE TABLE " + TBL_SUBJECT + " (" + SUBJECT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + SUBJECT_NAME + " TEXT)";
-        db.execSQL(createTableStatement) ;
+        String query = "CREATE TABLE " + TBL_SUBJECT + " (" + SUBJECT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + SUBJECT_NAME + " TEXT)";
+        db.execSQL(query) ;
 
-        createTableStatement = "CREATE TABLE " + TBL_NOTES + " (" + NOTE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + NOTE_SUBJECT_ID +" INTEGER REFERENCES "+ TBL_SUBJECT +"("+ SUBJECT_ID +"), "+ NOTE_TITLE + " TEXT, " + NOTE_DATA + " TEXT)";
-        db.execSQL(createTableStatement) ;
-        Log.d("query", createTableStatement);
+        query = "CREATE TABLE " + TBL_NOTES + " (" + NOTE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + NOTE_SUBJECT_ID +" INTEGER REFERENCES "+ TBL_SUBJECT +"("+ SUBJECT_ID +"), "+ NOTE_TITLE + " TEXT, " + NOTE_DATA + " TEXT, " + NOTE_TIMESTAMP + " default CURRENT_TIMESTAMP)";
+        db.execSQL(query);
     }
 
     @Override
@@ -57,14 +60,20 @@ public class NotesDB extends SQLiteOpenHelper {
 
         subject.put(SUBJECT_NAME, newSubject.getSubjectName());
 
-        long insert = db.insert(TBL_SUBJECT, null, subject);
-        if (insert < 0)
-        {
-            return false;
+        try{
+            long insert = db.insert(TBL_SUBJECT, null, subject);
+            if (insert < 0)
+            {
+                return false;
+            }
+            else {
+                return true;
+            }
         }
-        else {
-            return true;
+        catch (SQLiteException e){
+            Log.d("error", e.getMessage());
         }
+        return false;
     }
 
     public ArrayList<Subject> getAllSubjects(){
@@ -105,7 +114,9 @@ public class NotesDB extends SQLiteOpenHelper {
                 Integer noteSubjectId = cursor.getInt(1);
                 String noteTitle = cursor.getString(2);
                 String noteData = cursor.getString(3);
-                Notes temp = new Notes(noteId, noteSubjectId, noteTitle, noteData);
+                Timestamp timestamp = Timestamp.valueOf(cursor.getString(4));
+
+                Notes temp = new Notes(noteId, noteSubjectId, noteTitle, noteData, timestamp);
                 allNotes.add(temp);
             }while (cursor.moveToNext());
         }
@@ -128,7 +139,8 @@ public class NotesDB extends SQLiteOpenHelper {
                 Integer noteSubjectId = cursor.getInt(1);
                 String noteTitle = cursor.getString(2);
                 String noteData = cursor.getString(3);
-                Notes temp = new Notes(noteId, noteSubjectId, noteTitle, noteData);
+                Timestamp timestamp = Timestamp.valueOf(cursor.getString(4));
+                Notes temp = new Notes(noteId, noteSubjectId, noteTitle, noteData, timestamp);
 
                 cursor.close();
                 db.close();
@@ -144,13 +156,31 @@ public class NotesDB extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues note = new ContentValues();
 
-        note.put(NOTE_ID, newNote.getNOTE_ID());
-        note.put(NOTE_SUBJECT_ID, newNote.getNOTE_SUBJECT_ID());
-        note.put(NOTE_TITLE, newNote.getNOTE_TITLE());
-        note.put(NOTE_DATA, newNote.getNOTE_DATA());
+        note.put(NOTE_SUBJECT_ID, newNote.getNoteSubjectId());
+        note.put(NOTE_TITLE, newNote.getNoteTitle());
+        note.put(NOTE_DATA, newNote.getNoteData());
 
         long insert = db.insert(TBL_NOTES, null, note);
         if (insert < 0)
+        {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    public boolean updateNote(Notes notes){
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues note = new ContentValues();
+
+        note.put(NOTE_SUBJECT_ID, notes.getNoteSubjectId());
+        note.put(NOTE_TITLE, notes.getNoteTitle());
+        note.put(NOTE_DATA, notes.getNoteData());
+
+        int update = db.update(TBL_NOTES, note, NOTE_ID+"="+ notes.getNoteId(), null);
+
+        if (update < 0)
         {
             return false;
         }

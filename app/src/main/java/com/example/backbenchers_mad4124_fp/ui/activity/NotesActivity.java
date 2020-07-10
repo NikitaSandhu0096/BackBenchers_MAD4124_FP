@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,7 +46,9 @@ public class NotesActivity extends AppCompatActivity implements Serializable, Fl
         populateNotes();
     }
 
+
     private void populateNotes(){
+        Log.d("arrayCount", String.valueOf(notesDB.getNoteBySubjectId(selectedSubjectId).size()));
         NotesAdapter notesAdapter = new NotesAdapter(notesDB.getNoteBySubjectId(selectedSubjectId), selectedSubjectId);
 
         StaggeredGridLayoutManager mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(2,

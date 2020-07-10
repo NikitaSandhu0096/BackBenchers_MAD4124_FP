@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +21,7 @@ import com.example.backbenchers_mad4124_fp.adapters.SubjectsAdapter;
 import com.example.backbenchers_mad4124_fp.database.NotesDB;
 import com.example.backbenchers_mad4124_fp.models.Subject;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
 
 public class SubjectsFragment<onViewCreate> extends Fragment implements FloatingActionButton.OnClickListener {
     private SubjectsAdapter subjectsAdapter;
@@ -59,21 +61,23 @@ public class SubjectsFragment<onViewCreate> extends Fragment implements Floating
     public void onClick(View v) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("New Subject");
-
-        final EditText editText = new EditText(getContext());
-        editText.setInputType(InputType.TYPE_CLASS_TEXT);
-        builder.setView(editText);
+        builder.setView(R.layout.new_subjet_textfield);
 
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Subject newSubject = new Subject(editText.getText().toString());
+
+                TextInputEditText inputEditText = ((AlertDialog) dialog).findViewById(R.id.txtSubject);
+                Subject newSubject = new Subject(inputEditText.getText().toString());
                 NotesDB notesDB = new NotesDB(getActivity());
                 if (notesDB.addSubject(newSubject)){
                     refreshData();
+                    Toast.makeText(getContext(), "Added", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
+
 
         builder.setNegativeButton("Cancel", null);
         builder.show();

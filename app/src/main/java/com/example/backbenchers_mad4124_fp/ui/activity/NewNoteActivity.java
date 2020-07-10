@@ -4,10 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -16,6 +13,9 @@ import com.example.backbenchers_mad4124_fp.database.NotesDB;
 import com.example.backbenchers_mad4124_fp.models.Notes;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.sql.Timestamp;
+import java.util.Date;
 
 public class NewNoteActivity extends AppCompatActivity {
 
@@ -45,47 +45,52 @@ public class NewNoteActivity extends AppCompatActivity {
 
         if (selectedNoteId > 0){
             Notes temp = noteDB.getNoteByNoteId(selectedNoteId);
-            title.setText(temp.getNOTE_TITLE());
-            data.setText(temp.getNOTE_DATA());
+            title.setText(temp.getNoteTitle());
+            data.setText(temp.getNoteData());
         }
 
-//        cameraFab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                final String[] options = {"Image Library","Camera"};
-//                AlertDialog.Builder builder = new AlertDialog.Builder(NewNoteActivity.this);
-//                builder.setTitle("Image options");
-//                builder.setItems(options, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        if (which == 0){
-//                            Toast.makeText(NewNoteActivity.this,"Image Library", Toast.LENGTH_LONG).show();
-//                        }else {
-//                            Toast.makeText(NewNoteActivity.this,"Camera", Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//                });
-//                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//
-//                    }
-//                });
-//                builder.show();
-//            }
-//        });
+        cameraFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String[] options = {"Image Library","Camera"};
+                AlertDialog.Builder builder = new AlertDialog.Builder(NewNoteActivity.this);
+                builder.setTitle("Image options");
+                builder.setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == 0){
+                            Toast.makeText(NewNoteActivity.this,"Image Library", Toast.LENGTH_LONG).show();
+                        }else {
+                            Toast.makeText(NewNoteActivity.this,"Camera", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                builder.show();
+            }
+        });
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        if (selectedNoteId == -1){
-            //Create New Note
-            Notes newNote = new Notes(selectedSubjectId, title.getText().toString(), data.getText().toString());
-            noteDB.addNote(newNote);
-        }else{
-            //Update the note
+    protected void onPause() {
+        super.onPause();
+        if (!title.getText().toString().isEmpty() || !data.getText().toString().isEmpty()){
+            if (selectedNoteId == -1){
+                //Create New Note
+                Notes newNote = new Notes(selectedSubjectId, title.getText().toString(), data.getText().toString());
+                noteDB.addNote(newNote);
+            }else{
+                //Update the note
+                Notes note = noteDB.getNoteByNoteId(selectedNoteId);
+                note.setNoteTitle(title.getText().toString());
+                note.setNoteData(data.getText().toString());
+                noteDB.updateNote(note);
+            }
         }
     }
 }
