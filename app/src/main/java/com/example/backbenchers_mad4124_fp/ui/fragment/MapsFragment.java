@@ -1,6 +1,7 @@
 package com.example.backbenchers_mad4124_fp.ui.fragment;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -35,8 +36,9 @@ import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
-public class MapsFragment<onViewCreate> extends Fragment implements OnMapReadyCallback, LocationListener {
+public class MapsFragment<onViewCreate> extends Fragment implements OnMapReadyCallback {
 
     MapView mapView;
     GoogleMap map;
@@ -67,7 +69,7 @@ public class MapsFragment<onViewCreate> extends Fragment implements OnMapReadyCa
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-        LatLng location = new LatLng(43.5890, -79.6441);
+        LatLng location = new LatLng(43.589046, -79.644119);
         map.addMarker(new MarkerOptions().position(location).title("Here"));
         map.moveCamera(CameraUpdateFactory.newLatLng(location));
 
@@ -107,10 +109,5 @@ public class MapsFragment<onViewCreate> extends Fragment implements OnMapReadyCa
     public void onLowMemory() {
         super.onLowMemory();
         mapView.onLowMemory();
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-
     }
 }

@@ -40,7 +40,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/noteTextInputEditText"
             android:layout_width="match_parent"
-            android:layout_height="550dp"
+            android:layout_height="500dp"
             android:gravity="top"
             android:hint="Note" />
     </com.google.android.material.textfield.TextInputLayout>

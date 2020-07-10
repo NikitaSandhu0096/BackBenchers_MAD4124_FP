@@ -1,6 +1,7 @@
 package com.example.backbenchers_mad4124_fp.ui.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -51,9 +52,10 @@ public class NotesActivity extends AppCompatActivity implements Serializable, Fl
         Log.d("arrayCount", String.valueOf(notesDB.getNoteBySubjectId(selectedSubjectId).size()));
         NotesAdapter notesAdapter = new NotesAdapter(notesDB.getNoteBySubjectId(selectedSubjectId), selectedSubjectId);
 
-        StaggeredGridLayoutManager mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(2,
-                StaggeredGridLayoutManager.VERTICAL);
-        notesrecyclerView.setLayoutManager(mStaggeredGridLayoutManager);
+//        StaggeredGridLayoutManager mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(2,
+//                StaggeredGridLayoutManager.VERTICAL);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        notesrecyclerView.setLayoutManager(linearLayoutManager);
         notesrecyclerView.setAdapter(notesAdapter);
     }
 
