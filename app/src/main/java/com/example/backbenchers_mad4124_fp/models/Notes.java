@@ -2,6 +2,7 @@ package com.example.backbenchers_mad4124_fp.models;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 
 public class Notes {
@@ -47,11 +48,34 @@ public class Notes {
         return format.format(timestamp);
     }
 
+    public Timestamp getTimestampObject() {
+       return this.timestamp;
+    }
+
     public void setNoteTitle(String noteTitle) {
         this.noteTitle = noteTitle;
     }
 
     public void setNoteData(String noteData) {
         this.noteData = noteData;
+    }
+
+    public static Comparator<Notes> getTitleComparator(){
+        return new Comparator<Notes>() {
+            @Override
+            public int compare(Notes o1, Notes o2) {
+                return o1.getNoteTitle().compareToIgnoreCase(o2.getNoteTitle());
+            }
+        };
+    }
+
+    public static Comparator<Notes> getDateComparator(){
+        return new Comparator<Notes>() {
+            @Override
+            public int compare(Notes o1, Notes o2) {
+               return o2.getTimestampObject().compareTo(o1.getTimestampObject());
+            }
+        };
+
     }
 }

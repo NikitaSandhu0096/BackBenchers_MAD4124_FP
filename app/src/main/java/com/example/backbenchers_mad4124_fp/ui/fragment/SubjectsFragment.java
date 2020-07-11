@@ -53,7 +53,6 @@ public class SubjectsFragment<onViewCreate> extends Fragment implements Floating
         subjectrecyclerView = view.findViewById(R.id.subjectsrecyclerView);
         notesDB = new NotesDB(this.getContext());
         refreshData();
-
         fab.setOnClickListener(this);
     }
 
@@ -66,7 +65,6 @@ public class SubjectsFragment<onViewCreate> extends Fragment implements Floating
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
                 TextInputEditText inputEditText = ((AlertDialog) dialog).findViewById(R.id.txtSubject);
                 Subject newSubject = new Subject(inputEditText.getText().toString());
                 NotesDB notesDB = new NotesDB(getActivity());
@@ -76,7 +74,6 @@ public class SubjectsFragment<onViewCreate> extends Fragment implements Floating
                 }
             }
         });
-
 
 
         builder.setNegativeButton("Cancel", null);

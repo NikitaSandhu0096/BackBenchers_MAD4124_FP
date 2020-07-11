@@ -16,9 +16,13 @@ import android.widget.Toast;
 import com.example.backbenchers_mad4124_fp.R;
 import com.example.backbenchers_mad4124_fp.adapters.NotesAdapter;
 import com.example.backbenchers_mad4124_fp.database.NotesDB;
+import com.example.backbenchers_mad4124_fp.models.Notes;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class NotesActivity extends AppCompatActivity implements Serializable, FloatingActionButton.OnClickListener {
 
@@ -36,7 +40,7 @@ public class NotesActivity extends AppCompatActivity implements Serializable, Fl
         notesDB = new NotesDB(this);
         selectedSubjectId = getIntent().getIntExtra("selectedSubjectId",1);
 
-        populateNotes();
+        populateNotes(null);
 
         notesFab.setOnClickListener(this);
     }
@@ -44,13 +48,17 @@ public class NotesActivity extends AppCompatActivity implements Serializable, Fl
     @Override
     protected void onRestart() {
         super.onRestart();
-        populateNotes();
+        populateNotes(null);
     }
 
 
-    private void populateNotes(){
-        Log.d("arrayCount", String.valueOf(notesDB.getNoteBySubjectId(selectedSubjectId).size()));
-        NotesAdapter notesAdapter = new NotesAdapter(notesDB.getNoteBySubjectId(selectedSubjectId), selectedSubjectId);
+    private void populateNotes(ArrayList<Notes> notes){
+        NotesAdapter notesAdapter;
+        if ( notes == null) {
+            notesAdapter = new NotesAdapter(notesDB.getNoteBySubjectId(selectedSubjectId), selectedSubjectId);
+        }else{
+            notesAdapter = new NotesAdapter(notes, selectedSubjectId);
+        }
 
 //        StaggeredGridLayoutManager mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(2,
 //                StaggeredGridLayoutManager.VERTICAL);
@@ -68,12 +76,17 @@ public class NotesActivity extends AppCompatActivity implements Serializable, Fl
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        ArrayList<Notes> notes = notesDB.getNoteBySubjectId(selectedSubjectId);
         switch (id){
             case R.id.menu_title:
-                Toast.makeText(getApplicationContext(),"Title sort",Toast.LENGTH_LONG).show();
+                Collections.sort(notes, Notes.getTitleComparator());
+                populateNotes(notes);
+                Toast.makeText(getApplicationContext(),"Sorted By Title",Toast.LENGTH_LONG).show();
                 return true;
             case R.id.menu_date:
-                Toast.makeText(getApplicationContext(),"Date sort",Toast.LENGTH_LONG).show();
+                Collections.sort(notes, Notes.getDateComparator());
+                populateNotes(notes);
+                Toast.makeText(getApplicationContext(),"Latest Notes First",Toast.LENGTH_LONG).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

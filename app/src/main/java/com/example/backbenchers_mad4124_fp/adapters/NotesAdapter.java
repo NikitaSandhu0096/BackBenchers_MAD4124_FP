@@ -35,7 +35,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
     public void onBindViewHolder(@NonNull final NotesViewHolder holder, final int position) {
         Notes note = this.notesArrayList.get(position);
 
-        holder.txtNote.setText(note.getNoteTitle());
+        holder.txtNote.setText(note.getNoteTitle().isEmpty() ? note.getNoteData() : note.getNoteTitle());
         holder.txtTimestamp.setText(note.getTimestamp());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
