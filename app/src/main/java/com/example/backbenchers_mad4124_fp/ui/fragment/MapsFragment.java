@@ -18,12 +18,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.backbenchers_mad4124_fp.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -31,6 +34,7 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
@@ -38,17 +42,15 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-public class MapsFragment<onViewCreate> extends Fragment implements OnMapReadyCallback {
+public class MapsFragment<onViewCreate> extends Fragment {
 
     MapView mapView;
     GoogleMap map;
-    LocationManager locationManager;
     FusedLocationProviderClient fusedLocationProviderClient;
 
     public MapsFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,16 +65,50 @@ public class MapsFragment<onViewCreate> extends Fragment implements OnMapReadyCa
         super.onViewCreated(view, savedInstanceState);
         mapView = view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(this);
+
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
+
+        //  mapView.getMapAsync(this);
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+        {
+            getLocation();
+        }
+        else
+        {
+            ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.ACCESS_FINE_LOCATION},44);
+        }
+    }
+
+    private void getLocation() {
+        Task<Location> task = fusedLocationProviderClient.getLastLocation();
+
+        task.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(final Location location) {
+                if (location != null){
+                    mapView.getMapAsync(new OnMapReadyCallback() {
+                        @Override
+                        public void onMapReady(GoogleMap googleMap) {
+                            map = googleMap;
+                            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                            map.addMarker(new MarkerOptions().position(latLng).title("Here"));
+                            map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
+                           // map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+                        }
+                    });
+                }
+            }
+        });
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        map = googleMap;
-        LatLng location = new LatLng(43.589046, -79.644119);
-        map.addMarker(new MarkerOptions().position(location).title("Here"));
-        map.moveCamera(CameraUpdateFactory.newLatLng(location));
-
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 44){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                getLocation();
+            }
+        }
     }
 
     @Override
