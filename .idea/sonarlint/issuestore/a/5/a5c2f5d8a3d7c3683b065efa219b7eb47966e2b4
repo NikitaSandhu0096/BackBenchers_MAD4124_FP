@@ -1,0 +1,9 @@
+
+V
+java:S1117";Rename "notesDB" which hides the field declared at line 27.(§Óúá8À†¸Ø³.
+y
+java:S1450"^Remove the "subjectsAdapter" field and declare it as a local variable in the relevant methods.(¬ýî’8ç¤Œ¥³.
+`
+java:S2095"EUse try-with-resources or close this "NotesDB" in a "finally" clause.(§Óúá8À†¸Ø³.
+œ
+java:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ýå˜™8¡Ï£¤³.

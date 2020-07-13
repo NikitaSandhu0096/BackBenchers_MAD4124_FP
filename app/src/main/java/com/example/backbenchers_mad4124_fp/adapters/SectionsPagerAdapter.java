@@ -32,7 +32,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         Fragment fragment = null;
         switch (position){
             case 0:
-                fragment = new SubjectsFragment<>();
+                fragment = new SubjectsFragment();
                 break;
             case 1:
                 fragment = new MapsFragment<>();

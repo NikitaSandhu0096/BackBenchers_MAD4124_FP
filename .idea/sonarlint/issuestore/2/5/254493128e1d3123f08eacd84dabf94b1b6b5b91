@@ -1,0 +1,25 @@
+
+^
+java:S1126H"AReplace this if-then-else statement by a single return statement.(ª›æÂ8Ù¸Ô³.
+’
+java:S1319m"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(¢ñçƒüÿÿÿÿ8ó¦¯Ô³.
+’
+java:S1319V"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(¿Ò—´üÿÿÿÿ8ó¦¯Ô³.
+‡
+java:S1192,"eDefine a constant instead of duplicating this literal " INTEGER PRIMARY KEY AUTOINCREMENT, " 3 times.(³ÖêÉüÿÿÿÿ8‡‚õ¤´.
+Y
+java:S1854µ"6Remove this useless assignment to local variable "db".(ª²Ë®ûÿÿÿÿ8ğ’¥¦´.
+p
+java:S1192,"NDefine a constant instead of duplicating this literal "CREATE TABLE " 3 times.(³ÖêÉüÿÿÿÿ8„ñ¤´.
+L
+java:S1481ˆ")Remove this unused "note" local variable.(Â’¾Øûÿÿÿÿ8ó¦¯Ô³.
+J
+java:S1481µ"'Remove this unused "db" local variable.(ª²Ë®ûÿÿÿÿ8ğ’¥¦´.
+d
+java:S1126É"AReplace this if-then-else statement by a single return statement.(³ÜÏİùÿÿÿÿ8™Å¤¦´.
+_
+java:S1126«"AReplace this if-then-else statement by a single return statement.(ª›æÂ8ó¦¯Ô³.
+O
+java:S1128"2Remove this unused import 'java.sql.SQLException'.(ÛïÆŸ8æ¼ºÔ³.
+£
+java:S11867"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ÄÜ»ûÿÿÿÿ8ó¦¯Ô³.

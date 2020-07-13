@@ -2,6 +2,7 @@ package com.example.backbenchers_mad4124_fp.models;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 
@@ -12,6 +13,7 @@ public class Notes {
     private String noteTitle;
     private String noteData;
     private Timestamp timestamp;
+    private ArrayList<String> images;
 
     public Notes(Integer noteId, Integer noteSubjectId, String noteTitle, String noteData, Timestamp timestamp) {
         this.noteId = noteId;
@@ -58,6 +60,14 @@ public class Notes {
 
     public void setNoteData(String noteData) {
         this.noteData = noteData;
+    }
+
+    public ArrayList<String> getImages() {
+        return images;
+    }
+
+    public void setImages(ArrayList<String> images) {
+        this.images = images;
     }
 
     public static Comparator<Notes> getTitleComparator(){

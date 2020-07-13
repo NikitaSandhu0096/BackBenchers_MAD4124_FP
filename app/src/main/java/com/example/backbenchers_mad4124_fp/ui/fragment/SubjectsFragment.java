@@ -2,11 +2,9 @@ package com.example.backbenchers_mad4124_fp.ui.fragment;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,7 +21,7 @@ import com.example.backbenchers_mad4124_fp.models.Subject;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 
-public class SubjectsFragment<onViewCreate> extends Fragment implements FloatingActionButton.OnClickListener {
+public class SubjectsFragment extends Fragment implements FloatingActionButton.OnClickListener {
     private SubjectsAdapter subjectsAdapter;
     private RecyclerView subjectrecyclerView;
     private NotesDB notesDB;

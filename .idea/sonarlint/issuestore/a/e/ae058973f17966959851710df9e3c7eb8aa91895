@@ -1,0 +1,7 @@
+
+’
+java:S1319A"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(†ìû’úÿÿÿÿ8ï®æ£´.
+H
+java:S1128"+Remove this unused import 'java.util.Date'.(¸…¼ü8ŞÜÚ÷³.
+“
+java:S1319E"qThe type of the "images" object should be an interface such as "List" rather than the implementation "ArrayList".(ÿØùÿÿÿÿ8Ã ¤´.

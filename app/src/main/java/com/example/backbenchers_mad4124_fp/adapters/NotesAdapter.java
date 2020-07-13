@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHolder> {
     private ArrayList <Notes> notesArrayList;
     private Integer selectedSubjectId;
+
     public NotesAdapter(ArrayList<Notes> notesArrayList, Integer selectedSubjectId){
         this.notesArrayList = notesArrayList;
         this.selectedSubjectId = selectedSubjectId;
@@ -27,13 +29,12 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
     @Override
     public NotesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_notes, parent, false);
-        NotesViewHolder notesViewHolder = new NotesViewHolder(view);
-        return notesViewHolder;
+        return new NotesViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final NotesViewHolder holder, final int position) {
-        Notes note = this.notesArrayList.get(position);
+        final Notes note = this.notesArrayList.get(position);
 
         holder.txtNote.setText(note.getNoteTitle().isEmpty() ? note.getNoteData() : note.getNoteTitle());
         holder.txtTimestamp.setText(note.getTimestamp());
@@ -41,11 +42,10 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               Notes note = notesArrayList.get(position);
-                Intent intent = new Intent(v.getContext(), NewNoteActivity.class);
-                intent.putExtra("selectedNoteId", note.getNoteId());
-                intent.putExtra("selectedSubjectId",selectedSubjectId);
-                v.getContext().startActivity(intent);
+            Intent intent = new Intent(v.getContext(), NewNoteActivity.class);
+            intent.putExtra("selectedNoteId", note.getNoteId());
+            intent.putExtra("selectedSubjectId",selectedSubjectId);
+            v.getContext().startActivity(intent);
             }
         });
 
@@ -56,7 +56,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
         return this.notesArrayList.size();
     }
 
-    public class NotesViewHolder extends RecyclerView.ViewHolder {
+    public static class NotesViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtNote;
         TextView txtTimestamp;

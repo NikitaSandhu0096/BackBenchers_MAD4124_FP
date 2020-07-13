@@ -7,13 +7,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import com.example.backbenchers_mad4124_fp.models.Notes;
 import com.example.backbenchers_mad4124_fp.models.Subject;
 
-import java.sql.SQLException;
+import java.io.Console;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
@@ -30,6 +31,10 @@ public class NotesDB extends SQLiteOpenHelper {
     private static final String NOTE_DATA = "NOTE_DATA";
     public static final String NOTE_TIMESTAMP = "TIMESTAMP";
 
+    public static final String TBL_NOTE_IMAGES = "tblNoteImages";
+    public static final String NOTE_IMAGE_ID = "NOTE_IMAGE_ID";
+    public static final String IMAGE_PATH = "IMAGE_PATH";
+
 
     public NotesDB(@Nullable Context context) {
         super(context, "notes.db", null, 1);
@@ -41,6 +46,9 @@ public class NotesDB extends SQLiteOpenHelper {
         db.execSQL(query) ;
 
         query = "CREATE TABLE " + TBL_NOTES + " (" + NOTE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + NOTE_SUBJECT_ID +" INTEGER REFERENCES "+ TBL_SUBJECT +"("+ SUBJECT_ID +"), "+ NOTE_TITLE + " TEXT, " + NOTE_DATA + " TEXT, " + NOTE_TIMESTAMP + " default CURRENT_TIMESTAMP)";
+        db.execSQL(query);
+
+        query = "CREATE TABLE " + TBL_NOTE_IMAGES + "(" + NOTE_IMAGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+NOTE_ID+" INETGER REFERENCES "+TBL_NOTES+"("+NOTE_ID+ "), " + IMAGE_PATH + " TEXT)";
         db.execSQL(query);
     }
 
@@ -152,7 +160,7 @@ public class NotesDB extends SQLiteOpenHelper {
     }
 
 
-    public boolean addNote(Notes newNote){
+    public long addNote(Notes newNote){
         SQLiteDatabase db = getWritableDatabase();
         ContentValues note = new ContentValues();
 
@@ -160,14 +168,16 @@ public class NotesDB extends SQLiteOpenHelper {
         note.put(NOTE_TITLE, newNote.getNoteTitle());
         note.put(NOTE_DATA, newNote.getNoteData());
 
-        long insert = db.insert(TBL_NOTES, null, note);
-        if (insert < 0)
-        {
-            return false;
-        }
-        else {
-            return true;
-        }
+       return db.insert(TBL_NOTES, null, note);
+    }
+
+    public long addNoteImages(long noteId, String imagePath){
+        SQLiteDatabase db = getWritableDatabase();
+        final ContentValues note = new ContentValues();
+
+        note.put(NOTE_ID,noteId);
+        note.put(IMAGE_PATH, imagePath);
+        return db.insert(TBL_NOTE_IMAGES, null, note);
     }
 
     public boolean updateNote(Notes notes){

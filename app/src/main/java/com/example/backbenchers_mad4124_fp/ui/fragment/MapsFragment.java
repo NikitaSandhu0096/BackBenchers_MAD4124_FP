@@ -1,42 +1,23 @@
 package com.example.backbenchers_mad4124_fp.ui.fragment;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Criteria;
-import android.location.Geocoder;
-import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.backbenchers_mad4124_fp.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
 
 public class MapsFragment<onViewCreate> extends Fragment implements OnMapReadyCallback {
 
@@ -44,7 +25,6 @@ public class MapsFragment<onViewCreate> extends Fragment implements OnMapReadyCa
     GoogleMap map;
     LocationManager locationManager;
     FusedLocationProviderClient fusedLocationProviderClient;
-
     public MapsFragment() {
         // Required empty public constructor
     }
@@ -59,7 +39,6 @@ public class MapsFragment<onViewCreate> extends Fragment implements OnMapReadyCa
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
         super.onViewCreated(view, savedInstanceState);
         mapView = view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);

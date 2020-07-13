@@ -1,0 +1,18 @@
+
+X	java:S110"<This class has 9 parents which is greater than 5 authorized.(ĞÌà«8ğ½Ÿ´.
+O
+java:S1128"-Remove this unused import 'android.util.Log'.(Ô¦Ø²øÿÿÿÿ8ğ½Ÿ´.
+V
+java:S1128"9Remove this unused import 'java.util.function.Predicate'.(ïÍ–¶8Ï‹ãŸ´.
+Y
+java:S1128"<Remove this unused import 'androidx.annotation.RequiresApi'.(å„» 8ì£ãŸ´.
+K
+java:S1948 ")Make "notesDB" transient or serializable.(ù¨øÊüÿÿÿÿ8¥î• ´.
+I
+java:S1948"",Make "searchView" transient or serializable.(‰Ôô¦8ğ½Ÿ´.
+v
+java:S1450""YRemove the "searchView" field and declare it as a local variable in the relevant methods.(‰Ôô¦8ğ½Ÿ´.
+O
+java:S1128"-Remove this unused import 'android.os.Build'.(ãÇ¤Úıÿÿÿÿ8ì£ãŸ´.
+P
+java:S1948"3Make "notesrecyclerView" transient or serializable.(Ùäï²8ğ½Ÿ´.
