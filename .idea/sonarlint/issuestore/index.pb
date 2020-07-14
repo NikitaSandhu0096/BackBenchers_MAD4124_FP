@@ -31,3 +31,11 @@ Wapp/src/main/java/com/example/backbenchers_mad4124_fp/ui/fragment/SubjectsFragm
 Sapp/src/main/java/com/example/backbenchers_mad4124_fp/ui/activity/MainActivity.java,6/7/675ab6127759da4cfc325f1c3f564c60ef59dad2
 É
 Sapp/src/main/java/com/example/backbenchers_mad4124_fp/ui/fragment/MapsFragment.java,1/3/138af409a594165be548e0ea09f88e3e2966ebca
+á
+Wapp/src/main/java/com/example/backbenchers_mad4124_fp/widget/SpacingItemDecoration.java,2/e/2ea707d3b6a852d7685c7689758a2058ec034a7c
+Ñ
+Tapp/src/main/java/com/example/backbenchers_mad4124_fp/adapters/AdapterGridBasic.java,7/a/7a9c7d41c0bfd2877434663c04a8b425930bd269
+ç
+]app/src/main/java/com/example/backbenchers_mad4124_fp/ui/activity/NoteAttachmentActivity.java,7/7/77bc2cde2aeceef5173b34d18fec7aa47782ec32
+{
+Kapp/src/main/java/com/example/backbenchers_mad4124_fp/models/NoteImage.java,f/f/ff6e107c16bd8dcc219a5108f7407304c7820ec3

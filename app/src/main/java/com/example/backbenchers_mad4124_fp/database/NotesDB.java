@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.example.backbenchers_mad4124_fp.models.NoteImage;
 import com.example.backbenchers_mad4124_fp.models.Notes;
 import com.example.backbenchers_mad4124_fp.models.Subject;
 
@@ -136,7 +137,7 @@ public class NotesDB extends SQLiteOpenHelper {
     public Notes getNoteByNoteId(Integer nid){
         Notes note;
 
-        String query = "SELECT * FROM "+TBL_NOTES+" WHERE "+NOTE_SUBJECT_ID+"="+nid;
+        String query = "SELECT * FROM "+TBL_NOTES+" WHERE "+NOTE_ID+"="+nid;
 
         SQLiteDatabase db = readableDB();
 
@@ -197,6 +198,29 @@ public class NotesDB extends SQLiteOpenHelper {
         else {
             return true;
         }
+    }
+
+    public ArrayList<NoteImage> getNoteImagesByNoteId(Integer noteId){
+        ArrayList<NoteImage> images = new ArrayList<>();
+        String query = "SELECT * FROM "+TBL_NOTE_IMAGES+" WHERE "+NOTE_ID+" = "+noteId;
+
+        SQLiteDatabase db = readableDB();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()){
+            do {
+                Integer noteImageId = cursor.getInt(0);
+                Integer nid = cursor.getInt(1);
+                String imagePath = cursor.getString(2);
+                NoteImage temp = new NoteImage(noteImageId, nid, imagePath);
+                images.add(temp);
+            }while (cursor.moveToNext());
+            return images;
+        }
+        cursor.close();
+        db.close();
+        return null;
     }
 
 }

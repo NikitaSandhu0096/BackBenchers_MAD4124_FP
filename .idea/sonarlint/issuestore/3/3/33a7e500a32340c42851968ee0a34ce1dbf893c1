@@ -1,18 +1,26 @@
 
-X	java:S110"<This class has 9 parents which is greater than 5 authorized.(ĞÌà«8ğ½Ÿ´.
-O
-java:S1128"-Remove this unused import 'android.util.Log'.(Ô¦Ø²øÿÿÿÿ8ğ½Ÿ´.
-V
-java:S1128"9Remove this unused import 'java.util.function.Predicate'.(ïÍ–¶8Ï‹ãŸ´.
-Y
-java:S1128"<Remove this unused import 'androidx.annotation.RequiresApi'.(å„» 8ì£ãŸ´.
+S
+java:S1128"6Remove this unused import 'com.annimon.stream.Stream'.(Øó¦§8½ĞÕ´.
+\
+java:S1128":Remove this unused import 'com.annimon.stream.Collectors'.(°Şìáÿÿÿÿÿ8½ĞÕ´.
 K
-java:S1948 ")Make "notesDB" transient or serializable.(ù¨øÊüÿÿÿÿ8¥î• ´.
-I
-java:S1948"",Make "searchView" transient or serializable.(‰Ôô¦8ğ½Ÿ´.
-v
-java:S1450""YRemove the "searchView" field and declare it as a local variable in the relevant methods.(‰Ôô¦8ğ½Ÿ´.
-O
-java:S1128"-Remove this unused import 'android.os.Build'.(ãÇ¤Úıÿÿÿÿ8ì£ãŸ´.
+java:S1948&")Make "notesDB" transient or serializable.(ù¨øÊüÿÿÿÿ8›‹œÕ´.
+S
+java:S1128"1Remove this unused import 'java.util.Collection'.(¹ÉĞšùÿÿÿÿ8ë£‡Õ´.
 P
-java:S1948"3Make "notesrecyclerView" transient or serializable.(Ùäï²8ğ½Ÿ´.
+java:S1948%"3Make "notesrecyclerView" transient or serializable.(Ùäï²8ğ½Ÿ´.
+V
+java:S1128 "9Remove this unused import 'java.util.function.Predicate'.(ïÍ–¶8›‹œÕ´.
+]
+java:S1128!";Remove this unused import 'java.util.stream.StreamSupport'.(ö°€ÿÿÿÿÿ8ë£‡Õ´.
+q
+java:S1128"ORemove this unused import 'com.google.android.gms.common.util.CollectionUtils'.(€ª•úÿÿÿÿ8ë£‡Õ´.
+v
+java:S1450("YRemove the "searchView" field and declare it as a local variable in the relevant methods.(‰Ôô¦8ë£‡Õ´.
+X	java:S110#"<This class has 9 parents which is greater than 5 authorized.(ĞÌà«8ë£‡Õ´.
+M
+java:S1128"+Remove this unused import 'java.util.List'.(Õë±Äøÿÿÿÿ8™£Õ´.
+I
+java:S1948(",Make "searchView" transient or serializable.(‰Ôô¦8ë£‡Õ´.
+Z
+java:S1128	"8Remove this unused import 'android.widget.ArrayAdapter'.( €ŠÑÿÿÿÿÿ8Ø¤Ô´.

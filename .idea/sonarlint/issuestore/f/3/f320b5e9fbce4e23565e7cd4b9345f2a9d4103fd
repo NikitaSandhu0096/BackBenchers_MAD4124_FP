@@ -1,29 +1,41 @@
 
-I
-java:S1068'",Remove this unused "audioFab" private field.(Ä‰ú€8Ã›à®³.
-^
-java:S2259g"BA "NullPointerException" could be thrown; "data" is nullable here.(•ÆÌ8ûªÍ£´.
-Q	java:S110""<This class has 9 parents which is greater than 5 authorized.(ï¼£¨
-z
-java:S1450&"XRemove the "cameraFab" field and declare it as a local variable in the relevant methods.(—Çşûÿÿÿÿ8Ã›à®³.
-U
-java:S1128"3Remove this unused import 'android.os.Environment'.(É¿‹Ãûÿÿÿÿ8ùïù¢´.
-K
-java:S1128"/Remove this unused import 'java.sql.Timestamp'.(èò½+8Íë’Ô³.
-t
-java:S1450'"WRemove the "audioFab" field and declare it as a local variable in the relevant methods.(Ä‰ú€8Ã›à®³.
-	java:S116-"eRename this field "IMAGE_CAPTURE_REQUEST_CODE" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(†éòş8¯‚Î¡´.
-
-java:S1186Z"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(¦Œœ¢8±É„Ò³.
-H
-java:S1128 "+Remove this unused import 'java.util.Date'.(¸…¼ü8•ùäÓ³.
-R
-java:S1128"0Remove this unused import 'java.io.IOException'.(ªº»Úıÿÿÿÿ8´¡£´.
-\
-java:S1128":Remove this unused import 'java.io.FileNotFoundException'.(·î™ùÿÿÿÿ8´¡£´.
-[
-java:S1128">Remove this unused import 'java.security.spec.EncodedKeySpec'.(Ò¨íÃ8ˆûÖ¢´.
 >
-java:S1170-"!Make this final field static too.(†éòş8¯‚Î¡´.
-O
-java:S1128"-Remove this unused import 'android.util.Log'.(Ô¦Ø²øÿÿÿÿ8µŠœ¦´.
+java:S11704"!Make this final field static too.(†éòş8¯‚Î¡´.
+z
+java:S1450-"XRemove the "cameraFab" field and declare it as a local variable in the relevant methods.(—Çşûÿÿÿÿ8Ã›à®³.
+t
+java:S1450."WRemove the "audioFab" field and declare it as a local variable in the relevant methods.(Ä‰ú€8ÛÜ«Ò´.
+	java:S1164"eRename this field "IMAGE_CAPTURE_REQUEST_CODE" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(†éòş8¯‚Î¡´.
+R
+java:S1128#"0Remove this unused import 'java.io.IOException'.(ªº»Úıÿÿÿÿ8´¡£´.
+n
+java:S1301£"KReplace this "switch" statement by "if" statements to increase readability.(øå´¡ÿÿÿÿÿ8€á„Ë´.
+Q	java:S110)"<This class has 9 parents which is greater than 5 authorized.(ï¼£¨
+^
+java:S2259w"BA "NullPointerException" could be thrown; "data" is nullable here.(•ÆÌ8ûªÍ£´.
+ƒ	java:S1165"bRename this field "IMAGE_PICK_REQUEST_CODE" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(©ì‚çşÿÿÿÿ8çÍĞË´.
+D	java:S131£""Add a default case to this switch.(øå´¡ÿÿÿÿÿ8€á„Ë´.
+I
+java:S1068.",Remove this unused "audioFab" private field.(Ä‰ú€8ÛÜ«Ò´.
+[
+java:S1128$">Remove this unused import 'java.security.spec.EncodedKeySpec'.(Ò¨íÃ8ˆûÖ¢´.
+S
+java:S1128"6Remove this unused import 'android.view.MenuInflater'.(¥ñ´Ò8º–‚Ë´.
+e
+java:S2259‰"BA "NullPointerException" could be thrown; "data" is nullable here.(ÅË¼µøÿÿÿÿ8Ôï×Ë´.
+Z
+java:S2589Œ"7Remove this expression which always evaluates to "true"(Ñ½è¤ùÿÿÿÿ8ö¡Ì´.
+U
+java:S1128"3Remove this unused import 'android.os.Environment'.(É¿‹Ãûÿÿÿÿ8ùïù¢´.
+H
+java:S1128'"+Remove this unused import 'java.util.Date'.(¸…¼ü8•ùäÓ³.
+K
+java:S1128%"/Remove this unused import 'java.sql.Timestamp'.(èò½+8Íë’Ô³.
+C
+java:S11705"!Make this final field static too.(©ì‚çşÿÿÿÿ8çÍĞË´.
+\
+java:S1128!":Remove this unused import 'java.io.FileNotFoundException'.(·î™ùÿÿÿÿ8´¡£´.
+u
+java:S3776¢"RRefactor this method to reduce its Cognitive Complexity from 28 to the 15 allowed.(èëÔíÿÿÿÿÿ8 Ğ…Ë´.
+]
+java:S1128";Remove this unused import 'android.graphics.BitmapFactory'.(âàºÍûÿÿÿÿ8ÌÖıÓ´.
