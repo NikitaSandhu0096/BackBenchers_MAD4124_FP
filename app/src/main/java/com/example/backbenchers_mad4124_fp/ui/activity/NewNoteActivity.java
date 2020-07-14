@@ -110,6 +110,14 @@ public class NewNoteActivity extends AppCompatActivity {
             builder.show();
             }
         });
+
+        audioFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(NewNoteActivity.this, AudioRecord.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
