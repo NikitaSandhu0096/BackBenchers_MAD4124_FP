@@ -202,6 +202,9 @@ public class NewNoteActivity extends AppCompatActivity {
                     intent.putExtras(values);
                     startActivity(intent);
                 }
+                else {
+                    Toast.makeText(this, "Please save the note to view attachments", Toast.LENGTH_SHORT).show();
+                }
             break;
 
             case R.id.noteRecordings:

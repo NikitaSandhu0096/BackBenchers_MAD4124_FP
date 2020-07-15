@@ -13,6 +13,7 @@ import com.example.backbenchers_mad4124_fp.R;
 import com.example.backbenchers_mad4124_fp.util.TimeAgo;
 
 import java.io.File;
+import java.util.Date;
 
 
 public class AudioListAdaptor extends RecyclerView.Adapter<AudioListAdaptor.AudioViewHolder> {
@@ -36,7 +37,7 @@ public class AudioListAdaptor extends RecyclerView.Adapter<AudioListAdaptor.Audi
 
     @Override
     public void onBindViewHolder(@NonNull AudioViewHolder holder, int position) {
-        holder.list_title.setText(allFiles[position].getName());
+        holder.list_title.setText(new Date(allFiles[position].lastModified()).toString());
         holder.list_date.setText(timeAgo.getTimeAgo(allFiles[position].lastModified()));
     }
 

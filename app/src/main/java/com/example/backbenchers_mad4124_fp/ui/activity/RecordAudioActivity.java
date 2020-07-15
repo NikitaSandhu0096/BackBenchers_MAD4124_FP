@@ -49,27 +49,6 @@ public class RecordAudioActivity extends AppCompatActivity {
         noteDB = new NotesDB(this);
 
         selectedNoteId = getIntent().getIntExtra("selectedNoteId", 0);
-//        listBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (isRecording){
-//                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
-//                    alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialogInterface, int i) {
-//                            navController.navigate(R.id.action_audio_to_audioList);
-//                            isRecording = false;
-//                        }
-//                    });
-//                    alertDialog.setNegativeButton("Cancel",  null);
-//                    alertDialog.setTitle("Audio Still Recording");
-//                    alertDialog.setMessage("Are you sure you want to stop the recording");
-//                    alertDialog.create().show();
-//                }else {
-//                    navController.navigate(R.id.action_audio_to_audioList);
-//                }
-//            }
-//        });
 
         playPauseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
