@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.backbenchers_mad4124_fp.R;
-import com.example.backbenchers_mad4124_fp.ui.activity.TimeAgo;
+import com.example.backbenchers_mad4124_fp.util.TimeAgo;
 
 import java.io.File;
 

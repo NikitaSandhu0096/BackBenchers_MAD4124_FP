@@ -39,7 +39,7 @@ public class SubjectsAdapter extends RecyclerView.Adapter<SubjectsAdapter.Subjec
             public void onClick(View v) {
                 Subject selectedSubject = subjectArrayList.get(position);
                 Intent sIntent = new Intent(v.getContext(), NotesActivity.class);
-                sIntent.putExtra("selectedSubjectId",selectedSubject.getSubjectId());
+                        sIntent.putExtra("selectedSubjectId",selectedSubject.getSubjectId());
                 v.getContext().startActivity(sIntent);
             }
         });

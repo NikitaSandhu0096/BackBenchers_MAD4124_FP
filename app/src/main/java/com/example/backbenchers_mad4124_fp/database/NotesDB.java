@@ -7,15 +7,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
-import com.example.backbenchers_mad4124_fp.models.NoteImage;
+import com.example.backbenchers_mad4124_fp.models.NoteAttachment;
 import com.example.backbenchers_mad4124_fp.models.Notes;
 import com.example.backbenchers_mad4124_fp.models.Subject;
 
-import java.io.Console;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
@@ -32,9 +30,11 @@ public class NotesDB extends SQLiteOpenHelper {
     private static final String NOTE_DATA = "NOTE_DATA";
     public static final String NOTE_TIMESTAMP = "TIMESTAMP";
 
-    public static final String TBL_NOTE_IMAGES = "tblNoteImages";
-    public static final String NOTE_IMAGE_ID = "NOTE_IMAGE_ID";
-    public static final String IMAGE_PATH = "IMAGE_PATH";
+    public static final String TBL_NOTE_ATTACHMENTS = "tblNoteAttachments";
+    public static final String NOTE_ATTACHMENT_ID = "NOTE_ATTACHMENT_ID";
+    public static final String FILE_PATH = "FILE_PATH";
+    public static final String ATTACHMENT_TYPE = "ATTACHMENT_TYPE";
+    public static final String ATTACHMENT_TIMESTAMP = "ATTACHMENT_TIMESTAMP";
 
 
     public NotesDB(@Nullable Context context) {
@@ -49,7 +49,7 @@ public class NotesDB extends SQLiteOpenHelper {
         query = "CREATE TABLE " + TBL_NOTES + " (" + NOTE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + NOTE_SUBJECT_ID +" INTEGER REFERENCES "+ TBL_SUBJECT +"("+ SUBJECT_ID +"), "+ NOTE_TITLE + " TEXT, " + NOTE_DATA + " TEXT, " + NOTE_TIMESTAMP + " default CURRENT_TIMESTAMP)";
         db.execSQL(query);
 
-        query = "CREATE TABLE " + TBL_NOTE_IMAGES + "(" + NOTE_IMAGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+NOTE_ID+" INETGER REFERENCES "+TBL_NOTES+"("+NOTE_ID+ "), " + IMAGE_PATH + " TEXT)";
+        query = "CREATE TABLE " + TBL_NOTE_ATTACHMENTS + "(" + NOTE_ATTACHMENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+NOTE_ID+" INETGER REFERENCES "+TBL_NOTES+"("+NOTE_ID+ "), " + FILE_PATH + " TEXT, " + ATTACHMENT_TYPE + " TEXT, " + ATTACHMENT_TIMESTAMP + " default CURRENT_TIMESTAMP)";
         db.execSQL(query);
     }
 
@@ -172,13 +172,24 @@ public class NotesDB extends SQLiteOpenHelper {
        return db.insert(TBL_NOTES, null, note);
     }
 
-    public long addNoteImages(long noteId, String imagePath){
+    public long addNoteImageAttachment(long noteId, String imagePath){
         SQLiteDatabase db = getWritableDatabase();
         final ContentValues note = new ContentValues();
 
         note.put(NOTE_ID,noteId);
-        note.put(IMAGE_PATH, imagePath);
-        return db.insert(TBL_NOTE_IMAGES, null, note);
+        note.put(FILE_PATH, imagePath);
+        note.put(ATTACHMENT_TYPE,"image");
+        return db.insert(TBL_NOTE_ATTACHMENTS, null, note);
+    }
+
+    public long addNoteRecordingAttachment(long noteId, String filePath){
+        SQLiteDatabase db = getWritableDatabase();
+        final ContentValues note = new ContentValues();
+
+        note.put(NOTE_ID,noteId);
+        note.put(FILE_PATH, filePath);
+        note.put(ATTACHMENT_TYPE, "recording");
+        return db.insert(TBL_NOTE_ATTACHMENTS, null, note);
     }
 
     public boolean updateNote(Notes notes){
@@ -200,9 +211,9 @@ public class NotesDB extends SQLiteOpenHelper {
         }
     }
 
-    public ArrayList<NoteImage> getNoteImagesByNoteId(Integer noteId){
-        ArrayList<NoteImage> images = new ArrayList<>();
-        String query = "SELECT * FROM "+TBL_NOTE_IMAGES+" WHERE "+NOTE_ID+" = "+noteId;
+    public ArrayList<NoteAttachment> getNoteImagesByNoteId(Integer noteId){
+        ArrayList<NoteAttachment> images = new ArrayList<>();
+        String query = "SELECT * FROM "+ TBL_NOTE_ATTACHMENTS +" WHERE "+NOTE_ID+" = "+noteId +" AND "+ATTACHMENT_TYPE+"='image'";
 
         SQLiteDatabase db = readableDB();
 
@@ -213,7 +224,34 @@ public class NotesDB extends SQLiteOpenHelper {
                 Integer noteImageId = cursor.getInt(0);
                 Integer nid = cursor.getInt(1);
                 String imagePath = cursor.getString(2);
-                NoteImage temp = new NoteImage(noteImageId, nid, imagePath);
+                String type = cursor.getString(3);
+                Timestamp timestamp = Timestamp.valueOf(cursor.getString(4));
+                NoteAttachment temp = new NoteAttachment(noteImageId, nid, imagePath, type,timestamp);
+                images.add(temp);
+            }while (cursor.moveToNext());
+            return images;
+        }
+        cursor.close();
+        db.close();
+        return null;
+    }
+
+    public ArrayList<NoteAttachment> getNoteRecordingsByNoteId(Integer noteId){
+        ArrayList<NoteAttachment> images = new ArrayList<>();
+        String query = "SELECT * FROM "+ TBL_NOTE_ATTACHMENTS +" WHERE "+NOTE_ID+" = "+noteId +" AND "+ATTACHMENT_TYPE+"='recording'";
+
+        SQLiteDatabase db = readableDB();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()){
+            do {
+                Integer noteImageId = cursor.getInt(0);
+                Integer nid = cursor.getInt(1);
+                String imagePath = cursor.getString(2);
+                String type = cursor.getString(3);
+                Timestamp timestamp = Timestamp.valueOf(cursor.getString(4));
+                NoteAttachment temp = new NoteAttachment(noteImageId, nid, imagePath, type,timestamp);
                 images.add(temp);
             }while (cursor.moveToNext());
             return images;

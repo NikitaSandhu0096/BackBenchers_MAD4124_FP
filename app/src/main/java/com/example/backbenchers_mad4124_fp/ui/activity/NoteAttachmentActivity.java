@@ -1,42 +1,43 @@
 package com.example.backbenchers_mad4124_fp.ui.activity;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.TypedValue;
-import android.view.View;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.backbenchers_mad4124_fp.R;
 import com.example.backbenchers_mad4124_fp.adapters.AdapterGridBasic;
 import com.example.backbenchers_mad4124_fp.database.NotesDB;
-import com.example.backbenchers_mad4124_fp.models.NoteImage;
+import com.example.backbenchers_mad4124_fp.models.NoteAttachment;
 import com.example.backbenchers_mad4124_fp.widget.SpacingItemDecoration;
 
 import java.util.ArrayList;
 
 public class NoteAttachmentActivity extends AppCompatActivity {
 
-    private View parent_view;
     private RecyclerView recyclerView;
     private AdapterGridBasic mAdapter;
     private Bundle values;
-    private ArrayList<NoteImage> images;
-
+    private ArrayList<NoteAttachment> images;
     private NotesDB notesDB;
+
+    private Integer EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 101;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_attachment);
-        parent_view = findViewById(android.R.id.content);
+        ActivityCompat.requestPermissions(NoteAttachmentActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE);
         notesDB = new NotesDB(this);
         values = getIntent().getExtras();
-        images = notesDB.getNoteImagesByNoteId(values.getInt("selectedNoteId"));
-        initComponent();
     }
 
     private int dpToPx(int dp) {
@@ -55,4 +56,19 @@ public class NoteAttachmentActivity extends AppCompatActivity {
         recyclerView.setAdapter(mAdapter);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                images = notesDB.getNoteImagesByNoteId(values.getInt("selectedNoteId"));
+                if (images!=null){
+                    initComponent();
+                }
+            }
+            else {
+                finish();
+            }
+        }
+    }
 }

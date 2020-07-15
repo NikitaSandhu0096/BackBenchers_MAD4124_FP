@@ -1,9 +1,11 @@
 package com.example.backbenchers_mad4124_fp.adapters;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,4 +68,33 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
             txtTimestamp = itemView.findViewById(R.id.txtTimestamp);
         }
     }
+
+    public final Filter searchNoteFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            ArrayList<Notes> filteredList = new ArrayList<>();
+
+            if (constraint == null || constraint.length() == 0){
+                filteredList.addAll(notesArrayList);
+            }
+            else {
+                String pattern = constraint.toString().toLowerCase().trim();
+                for (Notes note : notesArrayList) {
+                    if (note.getNoteTitle().toLowerCase().contains(pattern) || note.getNoteData().toLowerCase().contains(pattern)){
+                        filteredList.add(note);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            notesArrayList.clear();
+            notesArrayList.addAll((ArrayList<Notes>)results.values);
+            notifyDataSetChanged();
+        }
+    };
 }

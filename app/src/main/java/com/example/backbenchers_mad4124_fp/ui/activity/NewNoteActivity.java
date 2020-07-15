@@ -11,14 +11,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -30,13 +27,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.security.spec.EncodedKeySpec;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class NewNoteActivity extends AppCompatActivity {
 
@@ -51,6 +43,8 @@ public class NewNoteActivity extends AppCompatActivity {
 
     private final Integer IMAGE_CAPTURE_REQUEST_CODE = 101;
     private final Integer IMAGE_PICK_REQUEST_CODE = 102;
+    private final Integer RECORD_AUDIO_REQUEST_CODE = 103;
+
 
     private Notes selectedNote;
     private ArrayList<String> selectedImages= new ArrayList<>();
@@ -69,8 +63,6 @@ public class NewNoteActivity extends AppCompatActivity {
 
         selectedSubjectId = getIntent().getIntExtra("selectedSubjectId", 0);
         selectedNoteId = getIntent().getIntExtra("selectedNoteId", 0);
-
-        Toast.makeText(this, selectedNoteId+" "+selectedSubjectId , Toast.LENGTH_SHORT).show();
 
         if (selectedNoteId > 0){
             selectedNote = noteDB.getNoteByNoteId(selectedNoteId);
@@ -114,8 +106,14 @@ public class NewNoteActivity extends AppCompatActivity {
         audioFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(NewNoteActivity.this, AudioRecord.class);
-                startActivity(intent);
+             if (selectedNote != null) {
+                 Intent intent = new Intent(NewNoteActivity.this, RecordAudioActivity.class);
+                 intent.putExtra("selectedNoteId", selectedNote.getNoteId());
+                 startActivityForResult(intent, RECORD_AUDIO_REQUEST_CODE);
+             }
+             else {
+                 Toast.makeText(NewNoteActivity.this, "Please first save the note to record audio", Toast.LENGTH_SHORT).show();
+             }
             }
         });
     }
@@ -142,6 +140,7 @@ public class NewNoteActivity extends AppCompatActivity {
             }
         }
         else if (requestCode == IMAGE_PICK_REQUEST_CODE){
+
             Uri selectedImage =  data.getData();
             String[] filePathColumn = {MediaStore.Images.Media.DATA};
             Log.d("imagePath", selectedImage.toString());
@@ -177,7 +176,7 @@ public class NewNoteActivity extends AppCompatActivity {
                         long noteId = noteDB.addNote(newNote);
                         if (!selectedImages.isEmpty()){
                             for (String path: selectedImages){
-                                noteDB.addNoteImages(noteId, path);
+                                noteDB.addNoteImageAttachment(noteId, path);
                             }
                         }
                     }else {
@@ -188,7 +187,7 @@ public class NewNoteActivity extends AppCompatActivity {
 
                         if(!selectedImages.isEmpty()){
                             for (String path: selectedImages){
-                                noteDB.addNoteImages(selectedNote.getNoteId(), path);
+                                noteDB.addNoteImageAttachment(selectedNote.getNoteId(), path);
                             }
                         }
                     }
@@ -204,9 +203,17 @@ public class NewNoteActivity extends AppCompatActivity {
                     intent.putExtras(values);
                     startActivity(intent);
                 }
+            break;
 
-
-
+            case R.id.noteRecordings:
+                if (selectedNote != null){
+                    Intent intent = new Intent(NewNoteActivity.this, NoteRecordingsActivity.class);
+                    intent.putExtra("selectedNoteId", selectedNote.getNoteId());
+                    startActivity(intent);
+                }
+                else {
+                    Toast.makeText(this, "Please save the note to view recordings", Toast.LENGTH_SHORT).show();
+                }
             break;
         }
         return super.onOptionsItemSelected(item);

@@ -1,44 +1,33 @@
 package com.example.backbenchers_mad4124_fp.ui.activity;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.annimon.stream.Collectors;
-import com.annimon.stream.Stream;
 import com.example.backbenchers_mad4124_fp.R;
 import com.example.backbenchers_mad4124_fp.adapters.NotesAdapter;
 import com.example.backbenchers_mad4124_fp.database.NotesDB;
 import com.example.backbenchers_mad4124_fp.models.Notes;
-import com.google.android.gms.common.util.CollectionUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.StreamSupport;
 
 public class NotesActivity extends AppCompatActivity implements Serializable, FloatingActionButton.OnClickListener {
 
     private RecyclerView notesrecyclerView;
     private NotesDB notesDB;
     private Integer selectedSubjectId;
-    private SearchView searchView;
-
+    private  NotesAdapter notesAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,25 +35,11 @@ public class NotesActivity extends AppCompatActivity implements Serializable, Fl
 
         FloatingActionButton notesFab = findViewById(R.id.notesFab);
         notesrecyclerView = findViewById(R.id.notesRecyclerView);
-        searchView = findViewById(R.id.searchNotes);
         notesDB = new NotesDB(this);
         selectedSubjectId = getIntent().getIntExtra("selectedSubjectId",-1);
         populateNotes(null);
         notesFab.setOnClickListener(this);
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-                @RequiresApi(api = Build.VERSION_CODES.N)
-                @Override
-                public boolean onQueryTextChange(final String newText) {
-                    return false;
-                }
-        });
     }
 
     @Override
@@ -80,7 +55,6 @@ public class NotesActivity extends AppCompatActivity implements Serializable, Fl
     }
 
     private void populateNotes(ArrayList<Notes> notes){
-        NotesAdapter notesAdapter;
         if ( notes == null) {
             notesAdapter = new NotesAdapter(notesDB.getNoteBySubjectId(selectedSubjectId), selectedSubjectId);
         }else{
@@ -94,7 +68,28 @@ public class NotesActivity extends AppCompatActivity implements Serializable, Fl
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.sort, menu);
+        getMenuInflater().inflate(R.menu.notes, menu);
+
+        MenuItem search = menu.findItem(R.id.noteSearch);
+        SearchView searchView = (SearchView) search.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText == null || newText.length() == 0){
+                    populateNotes(null);
+                }
+                else {
+                    notesAdapter.searchNoteFilter.filter(newText);
+                }
+                return true;
+            }
+        });
         return true;
     }
 

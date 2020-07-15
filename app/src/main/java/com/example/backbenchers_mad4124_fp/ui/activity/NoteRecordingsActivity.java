@@ -1,30 +1,36 @@
 package com.example.backbenchers_mad4124_fp.ui.activity;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.backbenchers_mad4124_fp.R;
 import com.example.backbenchers_mad4124_fp.adapters.AudioListAdaptor;
+import com.example.backbenchers_mad4124_fp.database.NotesDB;
+import com.example.backbenchers_mad4124_fp.models.NoteAttachment;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.function.Predicate;
 
-public class AudioList extends Fragment implements AudioListAdaptor.onItemListClick {
+public class NoteRecordingsActivity extends AppCompatActivity implements AudioListAdaptor.onItemListClick {
 
     private ConstraintLayout playerSheet;
     private BottomSheetBehavior bottomSheetBehavior;
@@ -45,37 +51,51 @@ public class AudioList extends Fragment implements AudioListAdaptor.onItemListCl
     private Handler seekbarHandler;
     private Runnable updateSeekbar;
 
-    public AudioList() {
-    }
-
+    private Integer selectedNoteId;
+    private ArrayList<NoteAttachment> attachments;
+    private NotesDB notesDB;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_audiolist, container, false);
-    }
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_note_recordings);
+        notesDB = new NotesDB(this);
+        selectedNoteId = getIntent().getIntExtra("selectedNoteId", 0);
+        attachments = notesDB.getNoteRecordingsByNoteId(selectedNoteId);
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
-        super.onViewCreated(view, savedInstanceState);
-
-        playerSheet = view.findViewById(R.id.player_sheet);
+        playerSheet = findViewById(R.id.player_sheet);
         bottomSheetBehavior = BottomSheetBehavior.from(playerSheet);
-        audioList = view.findViewById(R.id.audio_list_view);
+        audioList = findViewById(R.id.audio_list_view);
 
-        playButton = view.findViewById(R.id.imageView3);
-        playerHeader = view.findViewById(R.id.player_header_title);
-        playerFileName = view.findViewById(R.id.player_filename);
+        playButton = findViewById(R.id.imageView3);
+        playerHeader = findViewById(R.id.player_header_title);
+        playerFileName = findViewById(R.id.player_filename);
 
-        playerSeekbar = view.findViewById(R.id.player_seekbar);
+        playerSeekbar = findViewById(R.id.player_seekbar);
 
-        String path = getActivity().getExternalFilesDir("/").getAbsolutePath();
-        File directory = new File(path);
-        allFiles = directory.listFiles();
+
+        ContextWrapper cw = new ContextWrapper(NoteRecordingsActivity.this);
+        File directory = cw.getDir("recordings", Context.MODE_PRIVATE);
+        allFiles = directory.listFiles(new FileFilter() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public boolean accept(final File pathname) {
+                if (attachments != null) {
+                    return attachments.removeIf(new Predicate<NoteAttachment>() {
+                        @Override
+                        public boolean test(NoteAttachment noteAttachment) {
+                            return noteAttachment.getFilePath().compareToIgnoreCase(pathname.toString()) == 0;
+                        }
+                    });
+                }
+                else {
+                    return false;
+                }
+            }
+        });
 
         audioListAdaptor = new AudioListAdaptor(allFiles, this);
         audioList.setHasFixedSize(true);
-        audioList.setLayoutManager(new LinearLayoutManager(getContext()));
+        audioList.setLayoutManager(new LinearLayoutManager(NoteRecordingsActivity.this));
         audioList.setAdapter(audioListAdaptor);
 
         bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
@@ -127,26 +147,23 @@ public class AudioList extends Fragment implements AudioListAdaptor.onItemListCl
 
     @Override
     public void onClickListener(File file, int position) {
-      //  Log.d("PLAY_LOG" ,"File Playing" + file.getName());
         fileToPlay = file;
         if (isPlaying){
             stopAudio();
-            playAudio(fileToPlay);
-        }else {
-            playAudio(fileToPlay);
         }
+        playAudio(fileToPlay);
     }
 
     private void pauseAudio(){
         mediaPlayer.pause();
-        playButton.setImageDrawable(getActivity().getResources().getDrawable(R.mipmap.ic_media_play, null));
+        playButton.setImageDrawable(getResources().getDrawable(R.mipmap.ic_media_play, null));
         isPlaying = false;
         seekbarHandler.removeCallbacks(updateSeekbar);
     }
 
     private void resumeAudio(){
         mediaPlayer.start();
-        playButton.setImageDrawable(getActivity().getResources().getDrawable(R.mipmap.ic_media_pause, null));
+        playButton.setImageDrawable(getResources().getDrawable(R.mipmap.ic_media_pause, null));
         isPlaying = true;
         updateRunnable();
         seekbarHandler.postDelayed(updateSeekbar,0);
@@ -154,7 +171,7 @@ public class AudioList extends Fragment implements AudioListAdaptor.onItemListCl
 
     private void stopAudio() {
         isPlaying = false;
-        playButton.setImageDrawable(getActivity().getResources().getDrawable(R.mipmap.ic_media_play, null));
+        playButton.setImageDrawable(getResources().getDrawable(R.mipmap.ic_media_play, null));
         playerHeader.setText("Stopped");
         mediaPlayer.stop();
         seekbarHandler.removeCallbacks(updateSeekbar);
@@ -172,7 +189,7 @@ public class AudioList extends Fragment implements AudioListAdaptor.onItemListCl
             e.printStackTrace();
         }
 
-        playButton.setImageDrawable(getActivity().getResources().getDrawable(R.mipmap.ic_media_pause, null));
+        playButton.setImageDrawable(getResources().getDrawable(R.mipmap.ic_media_pause, null));
         playerFileName.setText(fileToPlay.getName());
         playerHeader.setText("Playing");
         isPlaying = true;

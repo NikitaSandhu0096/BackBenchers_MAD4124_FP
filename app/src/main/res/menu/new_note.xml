@@ -10,4 +10,7 @@
     <item
         android:id="@+id/noteAttachments"
         android:title="Attachements" />
+    <item
+        android:id="@+id/noteRecordings"
+        android:title="Recordings" />
 </menu>

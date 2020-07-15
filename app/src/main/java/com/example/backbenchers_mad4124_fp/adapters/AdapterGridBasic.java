@@ -9,20 +9,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.backbenchers_mad4124_fp.R;
-import com.example.backbenchers_mad4124_fp.models.NoteImage;
+import com.example.backbenchers_mad4124_fp.models.NoteAttachment;
 
 import java.util.ArrayList;
 
 public class AdapterGridBasic extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private ArrayList<NoteImage> items;
+    private ArrayList<NoteAttachment> items;
     private Context context;
 
-    public AdapterGridBasic(Context context, ArrayList<NoteImage> images) {
+    public AdapterGridBasic(Context context, ArrayList<NoteAttachment> images) {
         this.items = images;
         this.context = context;
     }
@@ -51,7 +50,7 @@ public class AdapterGridBasic extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof OriginalViewHolder) {
             OriginalViewHolder view = (OriginalViewHolder) holder;
-            view.image.setImageBitmap(BitmapFactory.decodeFile(items.get(position).getImagePath()));
+            view.image.setImageBitmap(BitmapFactory.decodeFile(items.get(position).getFilePath()));
             view.image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -60,7 +59,7 @@ public class AdapterGridBasic extends RecyclerView.Adapter<RecyclerView.ViewHold
                     final Dialog dialog = new Dialog(context);
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                     dialog.setContentView(dialogView);
-                    imageView.setImageBitmap(BitmapFactory.decodeFile(items.get(position).getImagePath()));
+                    imageView.setImageBitmap(BitmapFactory.decodeFile(items.get(position).getFilePath()));
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                     dialog.show();
                 }

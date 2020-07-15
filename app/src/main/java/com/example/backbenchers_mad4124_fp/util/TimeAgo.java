@@ -1,4 +1,4 @@
-package com.example.backbenchers_mad4124_fp.ui.activity;
+package com.example.backbenchers_mad4124_fp.util;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
