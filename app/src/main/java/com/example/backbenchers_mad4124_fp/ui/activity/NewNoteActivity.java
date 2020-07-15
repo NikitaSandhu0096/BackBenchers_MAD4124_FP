@@ -121,7 +121,7 @@ public class NewNoteActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == IMAGE_CAPTURE_REQUEST_CODE){
+        if (requestCode == IMAGE_CAPTURE_REQUEST_CODE && resultCode == RESULT_OK && data!=null){
             Bitmap bitmap = (Bitmap)data.getExtras().get("data");
             ContextWrapper cw = new ContextWrapper(getApplicationContext());
             File directory = cw.getDir("images", Context.MODE_PRIVATE);
@@ -139,8 +139,7 @@ public class NewNoteActivity extends AppCompatActivity {
                 }
             }
         }
-        else if (requestCode == IMAGE_PICK_REQUEST_CODE){
-
+        else if (requestCode == IMAGE_PICK_REQUEST_CODE && resultCode == RESULT_OK && data!=null){
             Uri selectedImage =  data.getData();
             String[] filePathColumn = {MediaStore.Images.Media.DATA};
             Log.d("imagePath", selectedImage.toString());
