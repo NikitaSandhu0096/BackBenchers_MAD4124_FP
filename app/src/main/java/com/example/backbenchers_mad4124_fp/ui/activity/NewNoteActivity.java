@@ -74,15 +74,6 @@ public class NewNoteActivity extends AppCompatActivity implements LocationListen
         cameraFab = findViewById(R.id.camerafab);
         audioFab = findViewById(R.id.audiofab);
         noteDB = new NotesDB(this);
-        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},USE_LOCATION_REQUEST_CODE);
-            return;
-        }
-        else {
-            location_permission_granted = true;
-        }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
         selectedSubjectId = getIntent().getIntExtra("selectedSubjectId", 0);
         selectedNoteId = getIntent().getIntExtra("selectedNoteId", 0);
@@ -139,9 +130,15 @@ public class NewNoteActivity extends AppCompatActivity implements LocationListen
             }
         });
 
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},USE_LOCATION_REQUEST_CODE);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},USE_LOCATION_REQUEST_CODE);
+            return;
         }
+        else {
+            location_permission_granted = true;
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
     }
 
     @Override
@@ -282,7 +279,6 @@ public class NewNoteActivity extends AppCompatActivity implements LocationListen
         if (requestCode == USE_LOCATION_REQUEST_CODE){
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 location_permission_granted = true;
-                Log.d("LocPermission", String.valueOf(location_permission_granted));
             }
         }
     }
