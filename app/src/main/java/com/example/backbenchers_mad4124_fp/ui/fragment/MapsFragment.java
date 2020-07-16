@@ -46,7 +46,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class MapsFragment<onViewCreate> extends Fragment {
+public class MapsFragment<onViewCreate> extends Fragment implements OnMapReadyCallback {
 
     MapView mapView;
     GoogleMap map;
@@ -70,26 +70,9 @@ public class MapsFragment<onViewCreate> extends Fragment {
         mapView = view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         notesDB = new NotesDB(getContext());
-        addMapMarkers();
+        mapView.getMapAsync(this);
     }
 
-    private void addMapMarkers(){
-        ArrayList<ArrayList<NoteLocation>> noteLocations = notesDB.getNoteLocations();
-
-        for (ArrayList<NoteLocation> notes:noteLocations){
-            for (final NoteLocation location: notes){
-                mapView.getMapAsync(new OnMapReadyCallback() {
-                    @Override
-                    public void onMapReady(GoogleMap googleMap) {
-                        map = googleMap;
-                        LatLng latLng = new LatLng(location.getLocation().getLatitude(), location.getLocation().getLongitude());
-                        map.addMarker(new MarkerOptions().position(latLng).title(location.getNoteTitle()));
-                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
-                    }
-                });
-            }
-        }
-    }
 
 
     @Override
@@ -102,7 +85,6 @@ public class MapsFragment<onViewCreate> extends Fragment {
     public void onResume() {
         super.onResume();
         mapView.onResume();
-        addMapMarkers();
     }
 
     @Override
@@ -127,5 +109,18 @@ public class MapsFragment<onViewCreate> extends Fragment {
     public void onLowMemory() {
         super.onLowMemory();
         mapView.onLowMemory();
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+        ArrayList<ArrayList<NoteLocation>> noteLocations = notesDB.getNoteLocations();
+        for (ArrayList<NoteLocation> notes:noteLocations){
+            for (final NoteLocation location: notes){
+                LatLng latLng = new LatLng(location.getLocation().getLatitude(), location.getLocation().getLongitude());
+                map.addMarker(new MarkerOptions().position(latLng).title(location.getNoteTitle()));
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
+            }
+        }
     }
 }
