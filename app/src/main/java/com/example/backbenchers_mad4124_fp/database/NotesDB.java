@@ -286,7 +286,7 @@ public class NotesDB extends SQLiteOpenHelper {
         ArrayList<NoteLocation> temp = new ArrayList<>();
 
         SQLiteDatabase db = readableDB();
-        String query = "SELECT "+NOTE_ID+" FROM "+TBL_NOTES;
+        String query = "SELECT "+NOTE_ID+","+NOTE_TITLE+" FROM "+TBL_NOTES;
 
         final Cursor noteIds = db.rawQuery(query, null);
 
@@ -295,20 +295,24 @@ public class NotesDB extends SQLiteOpenHelper {
                 query = "SELECT * FROM "+TBL_NOTE_LOCATIONS+" WHERE "+NOTE_ID+"="+noteIds.getInt(0);
                 final Cursor noteLocation = db.rawQuery(query, null);
                 if (noteLocation.moveToFirst()){
+                    temp.clear();
                     do {
-                        temp.clear();
+                        String noteTitle = noteIds.getString(1);
+
                         Integer noteLocationId = noteLocation.getInt(0);
                         Integer noteId = noteLocation.getInt(1);
                         Double lat = noteLocation.getDouble(2);
                         Double Long = noteLocation.getDouble(3);
+
                         final Location location = new Location("");
                         location.setLatitude(lat);
                         location.setLongitude(Long);
-                        NoteLocation noteLocation1 = new NoteLocation(noteLocationId, noteId,  location);
+                        NoteLocation noteLocation1 = new NoteLocation(noteLocationId, noteId,  location, noteTitle);
                         temp.add(noteLocation1);
                     }while (noteLocation.moveToNext());
                     noteLocations.add(temp);
                 }
+
             }while (noteIds.moveToNext());
         }
         return noteLocations;

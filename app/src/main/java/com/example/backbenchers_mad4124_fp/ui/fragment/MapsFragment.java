@@ -10,6 +10,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,7 +83,7 @@ public class MapsFragment<onViewCreate> extends Fragment {
                     public void onMapReady(GoogleMap googleMap) {
                         map = googleMap;
                         LatLng latLng = new LatLng(location.getLocation().getLatitude(), location.getLocation().getLongitude());
-                        map.addMarker(new MarkerOptions().position(latLng).title("Hello"));
+                        map.addMarker(new MarkerOptions().position(latLng).title(location.getNoteTitle()));
                         map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
                     }
                 });
@@ -101,6 +102,7 @@ public class MapsFragment<onViewCreate> extends Fragment {
     public void onResume() {
         super.onResume();
         mapView.onResume();
+        addMapMarkers();
     }
 
     @Override
