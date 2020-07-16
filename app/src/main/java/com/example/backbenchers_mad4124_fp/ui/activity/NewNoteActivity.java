@@ -4,13 +4,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -23,6 +30,10 @@ import android.widget.Toast;
 import com.example.backbenchers_mad4124_fp.R;
 import com.example.backbenchers_mad4124_fp.database.NotesDB;
 import com.example.backbenchers_mad4124_fp.models.Notes;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -30,7 +41,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 
-public class NewNoteActivity extends AppCompatActivity {
+public class NewNoteActivity extends AppCompatActivity implements LocationListener {
 
     private TextInputEditText title;
     private TextInputEditText data;
@@ -44,10 +55,14 @@ public class NewNoteActivity extends AppCompatActivity {
     private final Integer IMAGE_CAPTURE_REQUEST_CODE = 101;
     private final Integer IMAGE_PICK_REQUEST_CODE = 102;
     private final Integer RECORD_AUDIO_REQUEST_CODE = 103;
+    private final Integer USE_LOCATION_REQUEST_CODE = 104;
 
+    private Boolean location_permission_granted = false;
+    private LocationManager locationManager;
+    private Location lastLocation;
 
     private Notes selectedNote;
-    private ArrayList<String> selectedImages= new ArrayList<>();
+    private ArrayList<String> selectedImages = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,21 +74,29 @@ public class NewNoteActivity extends AppCompatActivity {
         cameraFab = findViewById(R.id.camerafab);
         audioFab = findViewById(R.id.audiofab);
         noteDB = new NotesDB(this);
-
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},USE_LOCATION_REQUEST_CODE);
+            return;
+        }
+        else {
+            location_permission_granted = true;
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
         selectedSubjectId = getIntent().getIntExtra("selectedSubjectId", 0);
         selectedNoteId = getIntent().getIntExtra("selectedNoteId", 0);
 
-        if (selectedNoteId > 0){
+        if (selectedNoteId > 0) {
             selectedNote = noteDB.getNoteByNoteId(selectedNoteId);
         }
 
-        if (selectedNote != null){
-            if (!selectedNote.getNoteTitle().isEmpty()){
+        if (selectedNote != null) {
+            if (!selectedNote.getNoteTitle().isEmpty()) {
                 title.setText(selectedNote.getNoteTitle());
             }
 
-            if (!selectedNote.getNoteData().isEmpty()){
+            if (!selectedNote.getNoteData().isEmpty()) {
                 data.setText(selectedNote.getNoteData());
             }
         }
@@ -81,48 +104,51 @@ public class NewNoteActivity extends AppCompatActivity {
         cameraFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            final String[] options = {"Image Library","Camera"};
+                final String[] options = {"Image Library", "Camera"};
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(NewNoteActivity.this);
-            builder.setTitle("Image options");
-            builder.setItems(options, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (which == 0){
-                        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        startActivityForResult(intent, IMAGE_PICK_REQUEST_CODE);
-                    }else {
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, IMAGE_CAPTURE_REQUEST_CODE);
+                AlertDialog.Builder builder = new AlertDialog.Builder(NewNoteActivity.this);
+                builder.setTitle("Image options");
+                builder.setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == 0) {
+                            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            startActivityForResult(intent, IMAGE_PICK_REQUEST_CODE);
+                        } else {
+                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            startActivityForResult(intent, IMAGE_CAPTURE_REQUEST_CODE);
+                        }
                     }
-                }
-            });
+                });
 
-            builder.setNegativeButton("Cancel", null);
-            builder.show();
+                builder.setNegativeButton("Cancel", null);
+                builder.show();
             }
         });
 
         audioFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             if (selectedNote != null) {
-                 Intent intent = new Intent(NewNoteActivity.this, RecordAudioActivity.class);
-                 intent.putExtra("selectedNoteId", selectedNote.getNoteId());
-                 startActivityForResult(intent, RECORD_AUDIO_REQUEST_CODE);
-             }
-             else {
-                 Toast.makeText(NewNoteActivity.this, "Please first save the note to record audio", Toast.LENGTH_SHORT).show();
-             }
+                if (selectedNote != null) {
+                    Intent intent = new Intent(NewNoteActivity.this, RecordAudioActivity.class);
+                    intent.putExtra("selectedNoteId", selectedNote.getNoteId());
+                    startActivityForResult(intent, RECORD_AUDIO_REQUEST_CODE);
+                } else {
+                    Toast.makeText(NewNoteActivity.this, "Please first save the note to record audio", Toast.LENGTH_SHORT).show();
+                }
             }
         });
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},USE_LOCATION_REQUEST_CODE);
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == IMAGE_CAPTURE_REQUEST_CODE && resultCode == RESULT_OK && data!=null){
-            Bitmap bitmap = (Bitmap)data.getExtras().get("data");
+        if (requestCode == IMAGE_CAPTURE_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
             ContextWrapper cw = new ContextWrapper(getApplicationContext());
             File directory = cw.getDir("images", Context.MODE_PRIVATE);
             File file = new File(directory, System.currentTimeMillis() + ".jpeg");
@@ -138,9 +164,8 @@ public class NewNoteActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        }
-        else if (requestCode == IMAGE_PICK_REQUEST_CODE && resultCode == RESULT_OK && data!=null){
-            Uri selectedImage =  data.getData();
+        } else if (requestCode == IMAGE_PICK_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            Uri selectedImage = data.getData();
             String[] filePathColumn = {MediaStore.Images.Media.DATA};
             Log.d("imagePath", selectedImage.toString());
             if (selectedImage != null) {
@@ -164,6 +189,14 @@ public class NewNoteActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    private void addCurrentLocationToNote(final long nid) {
+        if (location_permission_granted) {
+            if (lastLocation != null) {
+                noteDB.addNoteLocation(nid, lastLocation);
+            }
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
@@ -178,6 +211,7 @@ public class NewNoteActivity extends AppCompatActivity {
                                 noteDB.addNoteImageAttachment(noteId, path);
                             }
                         }
+                        addCurrentLocationToNote(noteId);
                     }else {
                         //Update the note
                         selectedNote.setNoteTitle(title.getText().toString());
@@ -189,6 +223,7 @@ public class NewNoteActivity extends AppCompatActivity {
                                 noteDB.addNoteImageAttachment(selectedNote.getNoteId(), path);
                             }
                         }
+                        addCurrentLocationToNote(selectedNote.getNoteId());
                     }
                 }
                 finish();
@@ -221,4 +256,34 @@ public class NewNoteActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onLocationChanged(Location location) {
+        this.lastLocation = location;
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == USE_LOCATION_REQUEST_CODE){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                location_permission_granted = true;
+                Log.d("LocPermission", String.valueOf(location_permission_granted));
+            }
+        }
+    }
 }

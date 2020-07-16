@@ -6,11 +6,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.location.Location;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 
 import com.example.backbenchers_mad4124_fp.models.NoteAttachment;
+import com.example.backbenchers_mad4124_fp.models.NoteLocation;
 import com.example.backbenchers_mad4124_fp.models.Notes;
 import com.example.backbenchers_mad4124_fp.models.Subject;
 
@@ -35,6 +37,10 @@ public class NotesDB extends SQLiteOpenHelper {
     public static final String FILE_PATH = "FILE_PATH";
     public static final String ATTACHMENT_TYPE = "ATTACHMENT_TYPE";
     public static final String ATTACHMENT_TIMESTAMP = "ATTACHMENT_TIMESTAMP";
+    public static final String TBL_NOTE_LOCATIONS = "tblNoteLocations";
+    public static final String NOTE_LOCATOIN_ID = "NOTE_LOCATOIN_ID";
+    public static final String NOTE_LAT = "LAT";
+    public static final String NOTE_LONG = "LONG";
 
 
     public NotesDB(@Nullable Context context) {
@@ -50,6 +56,9 @@ public class NotesDB extends SQLiteOpenHelper {
         db.execSQL(query);
 
         query = "CREATE TABLE " + TBL_NOTE_ATTACHMENTS + "(" + NOTE_ATTACHMENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+NOTE_ID+" INETGER REFERENCES "+TBL_NOTES+"("+NOTE_ID+ "), " + FILE_PATH + " TEXT, " + ATTACHMENT_TYPE + " TEXT, " + ATTACHMENT_TIMESTAMP + " default CURRENT_TIMESTAMP)";
+        db.execSQL(query);
+
+        query = "CREATE TABLE " + TBL_NOTE_LOCATIONS+ "(" + NOTE_LOCATOIN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+NOTE_ID+" INETGER REFERENCES "+TBL_NOTES+"("+NOTE_ID+")"+ ", " + NOTE_LAT + " DECIMAL, " + NOTE_LONG + " DECIMAL)";
         db.execSQL(query);
     }
 
@@ -261,4 +270,47 @@ public class NotesDB extends SQLiteOpenHelper {
         return null;
     }
 
+    public long addNoteLocation(long nid, Location location){
+        SQLiteDatabase db = getWritableDatabase();
+        final ContentValues noteLocation = new ContentValues();
+
+        noteLocation.put(NOTE_ID,nid);
+        noteLocation.put(NOTE_LAT, location.getLatitude());
+        noteLocation.put(NOTE_LONG, location.getLongitude());
+
+        return db.insert(TBL_NOTE_LOCATIONS, null, noteLocation);
+    }
+
+    public ArrayList<ArrayList<NoteLocation>> getNoteLocations(){
+        ArrayList<ArrayList<NoteLocation>> noteLocations = new ArrayList<>();
+        ArrayList<NoteLocation> temp = new ArrayList<>();
+
+        SQLiteDatabase db = readableDB();
+        String query = "SELECT "+NOTE_ID+" FROM "+TBL_NOTES;
+
+        final Cursor noteIds = db.rawQuery(query, null);
+
+        if (noteIds.moveToFirst()){
+            do {
+                query = "SELECT * FROM "+TBL_NOTE_LOCATIONS+" WHERE "+NOTE_ID+"="+noteIds.getInt(0);
+                final Cursor noteLocation = db.rawQuery(query, null);
+                if (noteLocation.moveToFirst()){
+                    do {
+                        temp.clear();
+                        Integer noteLocationId = noteLocation.getInt(0);
+                        Integer noteId = noteLocation.getInt(1);
+                        Double lat = noteLocation.getDouble(2);
+                        Double Long = noteLocation.getDouble(3);
+                        final Location location = new Location("");
+                        location.setLatitude(lat);
+                        location.setLongitude(Long);
+                        NoteLocation noteLocation1 = new NoteLocation(noteLocationId, noteId,  location);
+                        temp.add(noteLocation1);
+                    }while (noteLocation.moveToNext());
+                    noteLocations.add(temp);
+                }
+            }while (noteIds.moveToNext());
+        }
+        return noteLocations;
+    }
 }

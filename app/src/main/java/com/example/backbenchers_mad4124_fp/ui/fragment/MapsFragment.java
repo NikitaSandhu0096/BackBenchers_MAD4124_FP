@@ -22,6 +22,8 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.backbenchers_mad4124_fp.R;
+import com.example.backbenchers_mad4124_fp.database.NotesDB;
+import com.example.backbenchers_mad4124_fp.models.NoteLocation;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -39,6 +41,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -47,7 +50,7 @@ public class MapsFragment<onViewCreate> extends Fragment {
     MapView mapView;
     GoogleMap map;
     FusedLocationProviderClient fusedLocationProviderClient;
-
+    NotesDB notesDB;
     public MapsFragment() {
         // Required empty public constructor
     }
@@ -65,51 +68,28 @@ public class MapsFragment<onViewCreate> extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mapView = view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
-
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
-
-        //  mapView.getMapAsync(this);
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
-        {
-            getLocation();
-        }
-        else
-        {
-            ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.ACCESS_FINE_LOCATION},44);
-        }
+        notesDB = new NotesDB(getContext());
+        addMapMarkers();
     }
 
-    private void getLocation() {
-        Task<Location> task = fusedLocationProviderClient.getLastLocation();
+    private void addMapMarkers(){
+        ArrayList<ArrayList<NoteLocation>> noteLocations = notesDB.getNoteLocations();
 
-        task.addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(final Location location) {
-                if (location != null){
-                    mapView.getMapAsync(new OnMapReadyCallback() {
-                        @Override
-                        public void onMapReady(GoogleMap googleMap) {
-                            map = googleMap;
-                            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                            map.addMarker(new MarkerOptions().position(latLng).title("Here"));
-                            map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
-                           // map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
-                        }
-                    });
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 44){
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                getLocation();
+        for (ArrayList<NoteLocation> notes:noteLocations){
+            for (final NoteLocation location: notes){
+                mapView.getMapAsync(new OnMapReadyCallback() {
+                    @Override
+                    public void onMapReady(GoogleMap googleMap) {
+                        map = googleMap;
+                        LatLng latLng = new LatLng(location.getLocation().getLatitude(), location.getLocation().getLongitude());
+                        map.addMarker(new MarkerOptions().position(latLng).title("Hello"));
+                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
+                    }
+                });
             }
         }
     }
+
 
     @Override
     public void onStart() {

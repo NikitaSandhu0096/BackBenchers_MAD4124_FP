@@ -1,5 +1,8 @@
 
-
-java:S1319"yThe type of the "notesArrayList" object should be an interface such as "List" rather than the implementation "ArrayList".(”ùá
+O
+java:S1128"-Remove this unused import 'android.util.Log'.(Ô¦Ø²øÿÿÿÿ8ê÷íŸµ.
 S
-java:S1128"1Remove this unused import 'android.widget.Toast'.(©›ïÍúÿÿÿÿ8²µ ´.
+java:S1128
+"1Remove this unused import 'android.widget.Toast'.(©›ïÍúÿÿÿÿ8²µ ´.
+
+java:S1319"yThe type of the "notesArrayList" object should be an interface such as "List" rather than the implementation "ArrayList".(”ùá

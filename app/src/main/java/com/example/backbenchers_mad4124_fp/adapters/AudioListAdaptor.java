@@ -1,5 +1,6 @@
 package com.example.backbenchers_mad4124_fp.adapters;
 
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +38,9 @@ public class AudioListAdaptor extends RecyclerView.Adapter<AudioListAdaptor.Audi
 
     @Override
     public void onBindViewHolder(@NonNull AudioViewHolder holder, int position) {
-        holder.list_title.setText(new Date(allFiles[position].lastModified()).toString());
+
+        DateFormat dateFormat = new DateFormat();
+        holder.list_title.setText(dateFormat.format("dd-MMM-yyyy", new Date(allFiles[position].lastModified())));
         holder.list_date.setText(timeAgo.getTimeAgo(allFiles[position].lastModified()));
     }
 
