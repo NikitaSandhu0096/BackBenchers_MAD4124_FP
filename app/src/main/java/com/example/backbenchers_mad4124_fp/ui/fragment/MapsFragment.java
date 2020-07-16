@@ -50,7 +50,6 @@ public class MapsFragment<onViewCreate> extends Fragment implements OnMapReadyCa
 
     MapView mapView;
     GoogleMap map;
-    FusedLocationProviderClient fusedLocationProviderClient;
     NotesDB notesDB;
     public MapsFragment() {
         // Required empty public constructor
