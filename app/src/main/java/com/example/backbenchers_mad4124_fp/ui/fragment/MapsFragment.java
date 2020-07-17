@@ -84,7 +84,9 @@ public class MapsFragment<onViewCreate> extends Fragment implements OnMapReadyCa
     public void onResume() {
         super.onResume();
         mapView.onResume();
+        mapView.getMapAsync(this);
     }
+
 
     @Override
     public void onPause() {
@@ -114,10 +116,13 @@ public class MapsFragment<onViewCreate> extends Fragment implements OnMapReadyCa
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         ArrayList<ArrayList<NoteLocation>> noteLocations = notesDB.getNoteLocations();
-        for (ArrayList<NoteLocation> notes:noteLocations){
-            for (final NoteLocation location: notes){
-                LatLng latLng = new LatLng(location.getLocation().getLatitude(), location.getLocation().getLongitude());
-                map.addMarker(new MarkerOptions().position(latLng).title(location.getNoteTitle()));
+
+        for (int i = 0; i < noteLocations.size(); i++) {
+            ArrayList<NoteLocation> notes = noteLocations.get(i);
+
+            for (int j = 0; j < notes.size(); j++) {
+                LatLng latLng = new LatLng(notes.get(j).getLocation().getLatitude(), notes.get(j).getLocation().getLongitude());
+                map.addMarker(new MarkerOptions().position(latLng).title(notes.get(j).getNoteTitle()));
                 map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
             }
         }

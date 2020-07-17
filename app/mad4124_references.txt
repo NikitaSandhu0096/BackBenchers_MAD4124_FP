@@ -1,0 +1,11 @@
+https://stackoverflow.com/questions/31415742/how-to-change-floatingactionbutton-between-tabs
+
+http://www.pointercloud.com/2017/04/08/android-how-to-make-text-input-dialog/
+
+https://stackoverflow.com/questions/36154005/how-to-change-tab-title-name-by-dynamically-clicking-a-button
+
+https://stackoverflow.com/questions/31457099/android-fab-to-hide-when-navigating-between-different-fragments-in-a-viewpager
+
+https://www.javatpoint.com/android-option-menu-example
+
+https://www.youtube.com/watch?v=z--VaNj6l1U

@@ -55,12 +55,12 @@ public class RecordAudioActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (isRecording){
                     stopRecording();
-                    playPauseBtn.setImageDrawable(getResources().getDrawable(R.mipmap.ic_media_pause, null));
+                    playPauseBtn.setImageDrawable(getResources().getDrawable(R.mipmap.ic_media_play, null));
                     isRecording = false;
                 }else {
                     if (checkPermission()) {
                         startRecording();
-                        playPauseBtn.setImageDrawable(getResources().getDrawable(R.mipmap.ic_media_play, null));
+                        playPauseBtn.setImageDrawable(getResources().getDrawable(R.mipmap.ic_media_pause, null));
                         isRecording = true;
                     }
                 }
